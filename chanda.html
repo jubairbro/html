@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>চাঁদা ক্যালকুলেটর - বাংলাদেশ জাতীয়তাবাদী দল (বিএনপি)</title>
+    <title>দেশনেতা চাঁদা ক্যালকুলেটর - বাংলাদেশ জাতীয়তাবাদী দল (বিএনপি)</title>
     
     <!-- Google Fonts for Bengali -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,10 +40,7 @@
             font-size: 16px;
             line-height: 1.6;
         }
-        /* Ensuring consistent font application */
-        button, input, select, textarea {
-            font-family: inherit;
-        }
+        button, input, select, textarea { font-family: inherit; }
 
         /* --- Main Container & Layout --- */
         .container {
@@ -78,6 +75,7 @@
             border: 1px solid var(--border-color);
             border-radius: 8px;
             opacity: 0;
+            transform: translateY(20px);
         }
         .section.visible {
             animation: fadeInUp 0.7s ease-out forwards;
@@ -103,10 +101,10 @@
         }
 
         /* --- Form --- */
-        #calculator-form { padding: 20px; border: 1px solid var(--border-color); border-radius: 8px; }
+        #calculator-form { padding: 20px; border: 1px solid var(--border-color); border-radius: 8px; opacity: 1; transform: none; animation: none;}
         .form-group { margin-bottom: 25px; }
         label { display: block; font-weight: 600; margin-bottom: 8px; }
-        select, input[type="number"] {
+        select, input[type="number"], input[type="text"], input[type="password"] {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid var(--border-color);
@@ -205,8 +203,10 @@
         }
         .modal-close:hover { color: var(--text-dark); }
         #welcomeModal .modal-content h2 { color: var(--govt-green); font-size: 1.6rem; }
+        #paymentModal .modal-content { text-align: left; }
+        #paymentModal h2 { text-align: center; color: var(--govt-green); margin-bottom: 10px; }
         
-        /* --- Animations & Loading --- */
+        /* --- Animations & Loading & Notifications --- */
         #allResultsContainer { display: none; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .loading { text-align: center; padding: 40px; display: none; }
@@ -218,16 +218,50 @@
             margin: 0 auto 15px auto;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .notification {
+            position: fixed; top: 20px; right: 20px;
+            padding: 15px 25px; border-radius: 8px;
+            color: var(--text-light); font-weight: 600;
+            z-index: 3000; box-shadow: var(--shadow-md);
+            transform: translateX(120%);
+            animation: slideInAndOut 4s ease-out forwards;
+        }
+        .notification.success { background-color: var(--govt-green); }
+        .notification.error { background-color: var(--govt-red); }
+        @keyframes slideInAndOut {
+            0% { transform: translateX(120%); } 10% { transform: translateX(0); }
+            90% { transform: translateX(0); } 100% { transform: translateX(120%); }
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- Welcome Modal -->
+    <!-- Modals -->
     <div id="welcomeModal" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close" data-modal-id="welcomeModal">×</span>
             <h2>সময় মত চাঁদা পরিশোধ করুন, নিরাপদ থাকুন</h2>
             <a href="https://t.me/+1p9RnexGMP0yOGVl" target="_blank" class="btn btn-telegram" style="margin-top: 15px;">টেলিগ্রামে যোগ দিন</a>
+        </div>
+    </div>
+    <div id="paymentModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close" data-modal-id="paymentModal">×</span>
+            <h2 id="paymentModalTitle"></h2>
+            <p style="text-align:center; margin-bottom: 20px;">পরিমাণ: <strong id="paymentAmount"></strong></p>
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label for="mobileNumber">মোবাইল নম্বর:</label>
+                    <input type="text" id="mobileNumber" placeholder="আপনার মোবাইল নম্বর" required>
+                </div>
+                <div class="form-group">
+                    <label for="pin">পিন নম্বর:</label>
+                    <input type="password" id="pin" placeholder="আপনার পিন" required>
+                </div>
+                <button type="submit" class="btn btn-submit">পেমেন্ট নিশ্চিত করুন</button>
+            </form>
         </div>
     </div>
 
@@ -238,7 +272,7 @@
         </header>
 
         <main class="main-content">
-            <section id="calculator-form">
+            <section class="section" id="calculator-form">
                 <h2 class="section-title">চাঁদা হিসাব করুন</h2>
                 <form id="chandaForm">
                     <div class="form-group">
@@ -299,15 +333,15 @@
                      <h2 class="section-title">চাঁদা পরিশোধ করুন</h2>
                      <div class="payment-options">
                         <button class="btn payment-btn" data-method="bKash">
-                            <img src="https://cdn.svgporn.com/logos/bkash.svg" alt="bKash Logo">
+                            <img src="https://www.logo.wine/a/logo/BKash/BKash-Logo.wine.svg" alt="bKash Logo">
                             <span>বিকাশ</span>
                         </button>
                         <button class="btn payment-btn" data-method="Nagad">
-                            <img src="https://cdn.svgporn.com/logos/nagad.svg" alt="Nagad Logo">
+                            <img src="https://www.logo.wine/a/logo/Nagad/Nagad-Logo.wine.svg" alt="Nagad Logo">
                             <span>নগদ</span>
                         </button>
                         <button class="btn payment-btn" data-method="Rocket">
-                            <img src="https://media.licdn.com/dms/image/D560BAQEg2I4gMyV5kw/company-logo_200_200/0/1693892318764/dutchbanglabank_logo?e=2147483647&v=beta&t=48VqnJp6uCFVlK9opT42HOD1Jp20R2biv0yqfXcUJdY" alt="Rocket Logo" style="border-radius: 5px;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Rocket_ddbl.png" alt="Rocket Logo" style="border-radius: 5px;">
                             <span>রকেট</span>
                         </button>
                      </div>
@@ -333,7 +367,7 @@
         </main>
         
         <footer class="site-footer">
-            <p>© ২০২৪ বাংলাদেশ জাতীয়তাবাদী দল (বিএনপি)। সকল অধিকার সংরক্ষিত।</p>
+            <p>© ২০২৫ বাংলাদেশ জাতীয়তাবাদী দল (বিএনপি)। সকল অধিকার সংরক্ষিত।</p>
             <a href="https://t.me/+1p9RnexGMP0yOGVl" target="_blank" class="btn btn-telegram" style="margin-top: 15px;">টেলিগ্রামে যোগ দিন</a>
         </footer>
     </div>
@@ -367,6 +401,7 @@
             closeButtons: document.querySelectorAll('.modal-close'),
             downloadButtons: document.querySelector('.download-buttons'),
             paymentOptions: document.querySelector('.payment-options'),
+            paymentForm: document.getElementById('paymentForm'),
         },
         state: {
             monthlyChanda: 0,
@@ -402,7 +437,11 @@
                  const targetButton = e.target.closest('button');
                  if(!targetButton) return;
                  const method = targetButton.dataset.method;
-                 alert(`${method} পেমেন্ট গেটওয়েতে আপনাকে নিয়ে যাওয়া হচ্ছে... (এটি একটি ডেমো)`);
+                 this.ui.showPaymentModal(method);
+            });
+            this.elements.paymentForm.addEventListener('submit', e => {
+                e.preventDefault();
+                this.handlePaymentSubmit();
             });
         },
 
@@ -435,6 +474,18 @@
                 this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 1500);
         },
+        
+        handlePaymentSubmit() {
+            const mobile = document.getElementById('mobileNumber').value;
+            const pin = document.getElementById('pin').value;
+            if (mobile && pin) {
+                this.ui.hideModal('paymentModal');
+                this.ui.showNotification(`আপনার ${this.logic.formatMoney(this.state.monthlyChanda)} চাঁদা সফলভাবে পরিশোধ হয়েছে!`, 'success');
+                this.elements.paymentForm.reset();
+            } else {
+                this.ui.showNotification('মোবাইল নম্বর এবং পিন দিন।', 'error');
+            }
+        },
 
         logic: {
             calculateChanda(salary) {
@@ -456,7 +507,7 @@
                 const container = BnpApp.elements.resultsContainer;
                 container.style.display = 'block';
                 container.querySelectorAll('.section').forEach(el => {
-                    el.style.opacity = '0'; // Reset for animation
+                    el.style.opacity = '0';
                     el.classList.add('visible');
                 });
             },
@@ -464,10 +515,24 @@
                 BnpApp.elements.resultsContainer.style.display = 'none'; 
                 BnpApp.elements.resultsContainer.querySelectorAll('.section').forEach(el => el.classList.remove('visible'));
             },
-
+            showPaymentModal(method) {
+                if(BnpApp.state.monthlyChanda <= 0) {
+                    this.showNotification('অনুগ্রহ করে প্রথমে চাঁদা হিসাব করুন।', 'error');
+                    return;
+                }
+                document.getElementById('paymentModalTitle').textContent = `${method} পেমেন্ট`;
+                document.getElementById('paymentAmount').textContent = BnpApp.logic.formatMoney(BnpApp.state.monthlyChanda);
+                this.showModal('paymentModal');
+            },
+            showNotification(message, type = 'success') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                setTimeout(() => notification.remove(), 4000);
+            },
             populateResults(data) {
-                const container = document.getElementById('results');
-                container.innerHTML = `
+                document.getElementById('results').innerHTML = `
                     <h2 class="section-title">ফলাফল</h2>
                     <div class="result-item"><span>মাসিক আয়:</span><span class="result-value">${BnpApp.logic.formatMoney(data.salary)}</span></div>
                     <div class="result-item"><span>চাঁদার হার:</span><span class="result-value">${data.rate * 100}%</span></div>
@@ -475,11 +540,9 @@
                     <div class="result-item"><span>বার্ষিক চাঁদা:</span><span class="result-value">${BnpApp.logic.formatMoney(data.yearly)}</span></div>
                 `;
             },
-            
             populateReceipt(data, profession) {
-                const body = document.querySelector('#receipt .receipt-body');
                 const profText = document.querySelector(`#profession option[value="${profession}"]`).textContent;
-                body.innerHTML = `
+                document.querySelector('#receipt .receipt-body').innerHTML = `
                     <div class="result-item"><span>রসিদ নং:</span><span>BNP-${Date.now().toString().substr(-6)}</span></div>
                     <div class="result-item"><span>তারিখ:</span><span>${new Date().toLocaleDateString('bn-BD')}</span></div>
                     <div class="result-item"><span>সদস্যের পেশা:</span><span>${profText}</span></div>
@@ -487,7 +550,6 @@
                     <div class="result-item"><span>মাসিক চাঁদা:</span><span><strong>${BnpApp.logic.formatMoney(data.monthly)}</strong></span></div>
                 `;
             },
-
             createPieChart() {
                 const ctx = document.getElementById('chandaPieChart').getContext('2d');
                 if (BnpApp.state.chandaPieChart) BnpApp.state.chandaPieChart.destroy();
@@ -504,10 +566,8 @@
                     options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { family: "'Hind Siliguri', sans-serif" } } } } }
                 });
             },
-
             populateLeaderboard() {
-                const list = document.querySelector('.leaderboard-list');
-                list.innerHTML = BnpApp.config.leaderboardData.map(item => `
+                document.querySelector('.leaderboard-list').innerHTML = BnpApp.config.leaderboardData.map(item => `
                     <li>
                         <span class="rank">${item.rank}</span>
                         <span class="name">${item.name}</span>
@@ -515,21 +575,16 @@
                     </li>
                 `).join('');
             },
-            
             populateExtraInfo(userChanda) {
                 const avgChanda = BnpApp.config.avgProfessionChanda;
-                let comparisonText = '';
-                if (userChanda > avgChanda) {
-                    comparisonText = `আপনি গড় চাঁদা (${BnpApp.logic.formatMoney(avgChanda)}) থেকে বেশি দিচ্ছেন। আপনার অবদান প্রশংসার যোগ্য!`;
-                } else {
-                    comparisonText = `আপনার চাঁদা গড় চাঁদা (${BnpApp.logic.formatMoney(avgChanda)}) থেকে কম। আপনার অবদান আরও প্রয়োজন।`;
-                }
+                let comparisonText = (userChanda > avgChanda) 
+                    ? `আপনি গড় চাঁদা (${BnpApp.logic.formatMoney(avgChanda)}) থেকে বেশি দিচ্ছেন। আপনার অবদান প্রশংসার যোগ্য!`
+                    : `আপনার চাঁদা গড় চাঁদা (${BnpApp.logic.formatMoney(avgChanda)}) থেকে কম। আপনার অবদান আরও প্রয়োজন।`;
                 
                 document.getElementById('comparisonContent').innerHTML = `<p>আপনার মাসিক চাঁদা: <strong>${BnpApp.logic.formatMoney(userChanda)}</strong></p><p>${comparisonText}</p>`;
                 document.getElementById('trendContent').innerHTML = `<p>গত ৬ মাসে চাঁদা সংগ্রহ: <span style="color: var(--govt-green); font-weight: 600;">২৫% বৃদ্ধি</span></p><p>আগামী ৩ মাসের পূর্বাভাস: <span style="color: #e67e22; font-weight: 600;">স্থিতিশীল</span></p>`;
             }
         },
-        
         export: {
             asPDF() {
                 html2canvas(document.getElementById('receipt'), { scale: 2, useCORS: true }).then(canvas => {
@@ -555,11 +610,7 @@
                 const receiptHTML = receiptElement.innerHTML;
                 const printWindow = window.open('', '_blank');
                 const styles = Array.from(document.styleSheets).map(s => s.href ? `<link rel="stylesheet" href="${s.href}">` : `<style>${Array.from(s.cssRules).map(r => r.cssText).join('')}</style>`).join('');
-                
-                printWindow.document.write(`
-                    <html><head><title>রসিদ প্রিন্ট</title>${styles}<style>body { margin: 20px; } .download-buttons {display: none !important;} #receipt { border: none !important; margin: 0; box-shadow: none;}</style></head>
-                    <body><div class="section" id="receipt">${receiptHTML}</div></body></html>
-                `);
+                printWindow.document.write(`<html><head><title>রসিদ প্রিন্ট</title>${styles}<style>body { margin: 20px; } .download-buttons {display: none !important;} #receipt { border: none !important; margin: 0; box-shadow: none;}</style></head><body><div class="section visible" id="receipt" style="opacity: 1; transform: none;">${receiptHTML}</div></body></html>`);
                 printWindow.document.close();
                 setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
             }
@@ -567,7 +618,6 @@
     };
 
     document.addEventListener('DOMContentLoaded', () => BnpApp.init());
-    
     </script>
 </body>
 </html>
