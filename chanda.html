@@ -4,997 +4,569 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>চাঁদা ক্যালকুলেটর - বাংলাদেশ জাতীয়তাবাদী দল (বিএনপি)</title>
+    
+    <!-- Google Fonts for Bengali -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* --- Root Variables for Govt Theme --- */
+        :root {
+            --govt-green: #006a4e;
+            --govt-red: #f42a41;
+            --bg-white: #ffffff;
+            --bg-light-gray: #f4f7f6;
+            --text-dark: #212529;
+            --text-light: #ffffff;
+            --border-color: #dee2e6;
+            --info-blue: #e3f2fd;
+            --info-blue-dark: #0d6efd;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
+        /* --- Global Styles --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0056b3 0%, #003366 100%); /* BNP Blue */
-            min-height: 100vh;
-            padding: 20px;
-            color: white;
-        }
-        
-        /* Welcome & Payment Modal Styles */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
-            /* Improved centering */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--bg-light-gray);
+            color: var(--text-dark);
+            font-size: 16px;
+            line-height: 1.6;
         }
 
-        .modal-overlay.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, #004a99, #002244);
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 90%;
-            max-width: 500px;
-            border-radius: 15px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-            color: #fff;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.show .modal-content {
-            transform: scale(1);
-        }
-
-        .modal-close {
-            color: #fff;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 35px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .modal-close:hover {
-            transform: scale(1.1);
-        }
-        
-        .welcome-modal-content h2 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #ffc107;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-        }
-        
-        .welcome-modal-button {
-            background: #0088cc; /* Telegram Blue */
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .welcome-modal-button:hover {
-            background: #0077b3;
-            transform: translateY(-2px);
-        }
-
-        /* Payment Modal Specifics */
-        .payment-modal-content {
-             background-color: #fefefe;
-             color: #333;
-             text-align: left;
-        }
-
-        .payment-modal-content .close-button {
-             color: #aaa;
-        }
-       
-        .payment-modal-content .close-button:hover {
-            color: #333;
-        }
-
-        .payment-modal-content input {
-            background: #eee !important;
-            color: #333 !important;
-            margin-bottom: 15px;
-        }
-        
-        .payment-modal-content button {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1.1rem;
-            transition: background 0.3s ease;
-        }
-
-        .payment-modal-content button:hover {
-            background: #219d59;
-        }
-        /* End of Modal Styles */
-
-
+        /* --- Main Container & Layout --- */
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 900px;
+            margin: 30px auto;
+            background: var(--bg-white);
+            border-radius: 10px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
         }
-
-        .header {
+        .site-header {
+            background-color: var(--govt-green);
+            color: var(--text-light);
+            padding: 25px 30px;
             text-align: center;
-            margin-bottom: 30px;
         }
-
-        .header h1 {
-            color: white;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .header p {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 1.2rem;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            color: white;
-            font-weight: bold;
-            margin-bottom: 8px;
-            font-size: 1.1rem;
-        }
-
-        select, input {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            backdrop-filter: blur(5px);
-        }
-
-        select option {
-            background: #003366;
-            color: white;
-        }
-
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .btn {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .results {
+        .site-header h1 { font-size: 2.5rem; }
+        .site-header p { font-size: 1.2rem; opacity: 0.9; }
+        .main-content { padding: 30px; }
+        .site-footer {
+            background-color: var(--govt-green);
+            color: var(--text-light);
+            padding: 20px 30px;
+            text-align: center;
             margin-top: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            display: none;
         }
 
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
+        /* --- Section Styling --- */
+        .section {
+            margin-top: 35px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
+            animation: fadeInUp 0.7s ease-out forwards;
         }
-
-        .result-label {
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: bold;
-        }
-
-        .result-value {
-            color: #4ecdc4;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .receipt {
-            margin-top: 20px;
-            padding: 30px;
-            background: white;
-            color: #333;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            display: none;
-        }
-
-        .receipt-header {
+        .section-title {
             text-align: center;
-            border-bottom: 2px solid #333;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-
-        .receipt-title {
+            margin-bottom: 25px;
             font-size: 1.8rem;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--govt-green);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--govt-red);
         }
 
-        .receipt-subtitle {
-            font-size: 1.2rem;
-            color: #27ae60;
-            font-weight: bold;
-            margin-bottom: 10px;
+        /* --- Form --- */
+        #calculator-form { padding: 20px; border: 1px solid var(--border-color); border-radius: 8px; }
+        .form-group { margin-bottom: 25px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; }
+        select, input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--govt-red);
+            box-shadow: 0 0 0 3px rgba(244, 42, 65, 0.2);
         }
 
-        .receipt-body {
-            margin-bottom: 30px;
-        }
-
-        .receipt-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 8px 0;
-            border-bottom: 1px dotted #ccc;
-        }
-
-        .receipt-footer {
-            text-align: center;
-            border-top: 2px solid #333;
-            padding-top: 20px;
-        }
-
-        .signature-section {
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        .signature-img {
-            max-width: 200px;
-            height: auto;
-            margin: 10px 0;
-        }
-
-        .signature-name {
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: #2c3e50;
-        }
-
-        .download-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .download-btn {
-            flex: 1;
-            padding: 12px 20px;
+        /* --- Buttons --- */
+        .btn {
+            color: var(--text-light);
             border: none;
-            border-radius: 8px;
-            font-weight: bold;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            min-width: 120px;
             text-decoration: none;
+            display: inline-block;
             text-align: center;
         }
+        .btn-submit { background-color: var(--govt-red); width: 100%; margin-top: 10px; }
+        .btn-submit:hover { background-color: #d32032; transform: translateY(-2px); }
+        .btn-telegram { background-color: #0088cc; }
+        .btn-telegram:hover { background-color: #0077b3; }
 
-        .pdf-btn {
-            background: #e74c3c;
-            color: white;
-        }
+        /* --- Specific Section Designs --- */
+        #results { background-color: #e8f5e9; }
+        .result-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dotted var(--border-color); }
+        .result-item:last-child { border-bottom: none; }
+        .result-label { font-weight: 500; }
+        .result-value { font-weight: 700; color: var(--govt-red); }
 
-        .jpg-btn {
-            background: #3498db;
-            color: white;
-        }
+        #receipt { background-color: #fcfcfc; }
+        .receipt-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px;}
+        .receipt-title { font-size: 1.6rem; font-weight: 700; }
+        .signature-section { margin-top: 40px; }
+        .signature-img { max-width: 180px; }
+        .download-buttons { display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap; }
+        .download-btn { flex: 1; padding: 10px; min-width: 120px; }
+        .pdf-btn { background-color: #e74c3c; }
+        .jpg-btn { background-color: #3498db; }
+        .print-btn { background-color: #2ecc71; }
 
-        .print-btn {
-            background: #2ecc71;
-            color: white;
+        #paymentGateway { background-color: var(--info-blue); }
+        .payment-options { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .payment-btn { background-color: #fff; border: 1px solid var(--border-color); color: var(--text-dark); display: flex; align-items: center; gap: 8px; }
+        .payment-btn:hover { background-color: #e9ecef; }
+
+        #leaderboardSection { background-color: #2c3e50; color: var(--text-light); }
+        #leaderboardSection .section-title { color: #f1c40f; }
+        .leaderboard-list { list-style: none; padding: 0; }
+        .leaderboard-list li { display: flex; align-items: center; background: rgba(255,255,255,0.1); padding: 12px 15px; border-radius: 6px; margin-bottom: 10px; }
+        .leaderboard-list li .rank { font-size: 1.2rem; font-weight: 700; margin-right: 15px; }
+        .leaderboard-list li .name { flex-grow: 1; }
+        .leaderboard-list li .amount { font-weight: 600; }
+        .leaderboard-list li:nth-child(-n+3) .rank { color: #f1c40f; }
+
+        .info-card-container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .info-card { flex: 1; min-width: 250px; background-color: var(--info-blue); padding: 20px; border-radius: 8px; border-left: 5px solid var(--info-blue-dark); }
+        .info-card h3 { margin-bottom: 10px; color: var(--info-blue-dark); }
+        #trendSection .info-card { border-left-color: #f1c40f; }
+        #trendSection h3 { color: #f1c40f; }
+
+        /* --- Modal (Dialog Box) --- */
+        .modal-overlay {
+            position: fixed; z-index: 2000; left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
+        .modal-overlay.show { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: var(--bg-white); padding: 30px; border-radius: 10px;
+            width: 90%; max-width: 500px; text-align: center;
+            position: relative; box-shadow: var(--shadow-md);
+            transform: scale(0.9); transition: transform 0.3s ease;
+        }
+        .modal-overlay.show .modal-content { transform: scale(1); }
+        .modal-close {
+            position: absolute; top: 10px; right: 20px;
+            font-size: 30px; font-weight: bold; color: #aaa;
+            cursor: pointer; transition: color 0.2s ease;
+        }
+        .modal-close:hover { color: var(--text-dark); }
+        #welcomeModal .modal-content h2 { color: var(--govt-green); font-size: 1.6rem; }
         
-        .telegram-btn {
-             background: #0088cc;
-             color: white;
-             margin-top: 15px;
-             display: inline-block;
-        }
+        /* --- Hamburger Menu & Mobile --- */
+        .hamburger { display: none; } /* Kept for potential future use */
 
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-        }
-
-        .hamburger {
-            display: none;
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-        }
-
-        .hamburger span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: white;
-            margin: 5px auto;
-            border-radius: 2px;
-            transition: 0.3s;
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 300px;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-            z-index: 999;
-            padding: 80px 20px 20px;
-        }
-
-        .mobile-menu.active {
-            right: 0;
-        }
-
-        .mobile-menu a {
-            display: block;
-            color: white;
-            text-decoration: none;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 1.1rem;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .loading {
-            text-align: center;
-            color: white;
-            font-size: 1.2rem;
-            display: none;
-        }
-
+        /* --- Animations & Loading --- */
+        #allResultsContainer { display: none; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .loading { text-align: center; padding: 40px; display: none; }
         .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid #fff;
-            width: 40px;
-            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1); border-radius: 50%;
+            border-top: 4px solid var(--govt-red);
+            width: 50px; height: 50px;
             animation: spin 1s linear infinite;
-            margin: 20px auto;
+            margin: 0 auto 15px auto;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .chanda-usage, .charts-section, .payment-gateway, .leaderboard-section, .comparison-section, .trend-section {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            color: white;
-        }
-        
-        .chanda-usage, .charts-section, .payment-gateway, .leaderboard-section, .comparison-section, .trend-section, .results, .receipt {
-            display: none; /* Initially hide all result sections */
-        }
-        
-        .chanda-usage h2, .charts-section h2, .payment-gateway h2, .leaderboard-section h2, .comparison-section h2, .trend-section h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: white;
-        }
-
-        .chanda-usage ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .chanda-usage li {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chanda-usage li span:first-child {
-            font-weight: bold;
-        }
-
-        .chart-container {
-            width: 100%;
-            max-width: 400px;
-            margin: 20px auto;
-        }
-
-        .payment-gateway {
-            text-align: center;
-        }
-
-        .payment-options button {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin: 5px;
-            font-weight: bold;
-        }
-        
-        .leaderboard-list li {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .leaderboard-list li span:first-child {
-            font-weight: bold;
-        }
-
-        .comparison-data p, .trend-data p {
-            margin-bottom: 10px;
-        }
-        
-        /* Responsive Improvements */
-        @media (max-width: 768px) {
-            .hamburger {
-                display: block;
-            }
-
-            .mobile-menu {
-                display: block;
-            }
-
-            .container {
-                padding: 15px;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            h2 {
-               font-size: 1.5rem;
-            }
-
-            .download-buttons {
-                flex-direction: column;
-            }
-
-            .download-btn {
-                width: 100%;
-            }
-        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+
     <!-- Welcome Modal -->
     <div id="welcomeModal" class="modal-overlay">
-        <div class="modal-content welcome-modal-content">
-            <span class="modal-close" onclick="closeModal('welcomeModal')">×</span>
+        <div class="modal-content">
+            <span class="modal-close" data-modal-id="welcomeModal">×</span>
             <h2>সময় মত চাঁদা পরিশোধ করুন, নিরাপদ থাকুন</h2>
-            <a href="https://t.me/+1p9RnexGMP0yOGVl" target="_blank" class="welcome-modal-button" onclick="closeModal('welcomeModal')">
-                টেলিগ্রামে যোগ দিন
-            </a>
+            <a href="https://t.me/+1p9RnexGMP0yOGVl" target="_blank" class="btn btn-telegram" style="margin-top: 15px;">টেলিগ্রামে যোগ দিন</a>
         </div>
-    </div>
-
-    <!-- Payment Modal -->
-    <div id="paymentModal" class="modal-overlay">
-        <div class="modal-content payment-modal-content">
-            <span class="modal-close close-button" onclick="closeModal('paymentModal')">×</span>
-            <h2><span id="paymentMethodName"></span> পেমেন্ট</h2>
-            <p>পরিমাণ: <strong id="paymentAmountDisplay"></strong></p>
-            <div class="form-group">
-                <label for="mobileNumber">মোবাইল নম্বর:</label>
-                <input type="text" id="mobileNumber" placeholder="আপনার মোবাইল নম্বর দিন" required>
-            </div>
-            <div class="form-group">
-                <label for="pin">পিন নম্বর:</label>
-                <input type="password" id="pin" placeholder="আপনার পিন নম্বর দিন" required>
-            </div>
-            <button onclick="confirmPayment()">পেমেন্ট নিশ্চিত করুন</button>
-        </div>
-    </div>
-
-
-    <button class="hamburger" onclick="toggleMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="#" onclick="showTrendAnalysis()">📈 ট্রেন্ড এনালাইসিস</a>
-        <a href="#" onclick="showComparison()">📊 তুলনামূলক বিশ্লেষণ</a>
-        <a href="#" onclick="showLeaderboard()">🏆 লিডারবোর্ড</a>
-        <a href="#" onclick="toggleMenu()">❌ বন্ধ করুন</a>
     </div>
 
     <div class="container">
-        <div class="header">
+        <header class="site-header">
             <h1>🏛️ চাঁদা ক্যালকুলেটর</h1>
             <p>বাংলাদেশ জাতীয়তাবাদী দল (বিএনপি)</p>
-        </div>
+        </header>
 
-        <form id="chandaForm">
-            <div class="form-group">
-                <label for="profession">পেশা নির্বাচন করুন:</label>
-                <select id="profession" required>
-                    <option value="">পেশা নির্বাচন করুন</option>
-                    <option value="doctor">ডাক্তার (চিকিৎসক)</option>
-                    <option value="engineer">ইঞ্জিনিয়ার (প্রকৌশলী)</option>
-                    <option value="teacher">শিক্ষক (গুরুমশাই)</option>
-                    <option value="lawyer">আইনজীবী (উকিল সাহেব)</option>
-                    <option value="businessman">ব্যবসায়ী (বড়লোক)</option>
-                    <option value="government">সরকারি কর্মচারী (জনগণের সেবক)</option>
-                    <option value="private">বেসরকারি কর্মচারী (দিনমজুর)</option>
-                    <option value="farmer">কৃষক (মাটির সন্তান)</option>
-                    <option value="student">ছাত্র (ভবিষ্যতের নেতা)</option>
-                    <option value="housewife">গৃহিণী (গৃহকর্ত্রী)</option>
-                    <option value="unemployed">বেকার (আন্দোলন কর্মী)</option>
-                    <option value="politician">রাজনীতিবিদ (জননেতা)</option>
-                    <option value="journalist">সাংবাদিক (কলম সৈনিক)</option>
-                    <option value="artist">শিল্পী (সংস্কৃতি কর্মী)</option>
-                    <option value="other">অন্যান্য (সাধারণ জনতা)</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="salary">মাসিক আয় (টাকা):</label>
-                <input type="number" id="salary" placeholder="আপনার মাসিক আয় লিখুন" required>
-            </div>
-
-            <button type="submit" class="btn">হিসাব দেখুন</button>
-        </form>
-
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>হিসাব করা হচ্ছে...</p>
-        </div>
-        
-        <!-- All result sections are grouped here for easier management -->
-        <div id="allResultsContainer" style="display: none;">
-            <div class="results" id="results">
-                <h2 style="color: white; text-align: center; margin-bottom: 20px;">📊 চাঁদার হিসাব</h2>
-                <div class="result-item">
-                    <span class="result-label">মাসিক আয়:</span>
-                    <span class="result-value" id="monthlyIncome">০ টাকা</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">চাঁদার হার:</span>
-                    <span class="result-value" id="chandaRate">১০%</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">মাসিক চাঁদা:</span>
-                    <span class="result-value" id="monthlyChanda">০ টাকা</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">বার্ষিক চাঁদা:</span>
-                    <span class="result-value" id="yearlyChanda">০ টাকা</span>
-                </div>
-            </div>
-
-            <div class="receipt" id="receipt">
-                <div class="receipt-header">
-                    <div class="receipt-title">চাঁদা প্রাপতির রসিদ</div>
-                    <div class="receipt-subtitle">চাঁদা রিসিভ হয়েছে সোনা ভাই!</div>
-                    <p>বাংলাদেশ জাতীয়তাবাদী দল (বিএনপি)</p>
-                    <p>তারিখ: <span id="receiptDate"></span></p>
-                    <p>রসিদ নং: <span id="receiptNumber"></span></p>
-                </div>
-                <div class="receipt-body">
-                    <!-- Receipt rows will be populated by JS -->
-                </div>
-                <div class="receipt-footer">
-                    <p><strong>ধন্যবাদ আপনার অবদানের জন্য!</strong></p>
-                    <p>গণতন্ত্র পুনরুদ্ধারে বিএনপির সাথে থাকুন</p>
-                    <div class="signature-section">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Tarique_Rahman_signature.svg" 
-                             alt="তারেক রহমান (খাম্বা তারেক) এর স্বাক্ষর" class="signature-img">
-                        <div class="signature-name">তারেক রহমান (খাম্বা তারেক)</div>
-                        <div>ভারপ্রাপ্ত চেয়ারম্যান, লন্ডন</div>
-                        <div>বাংলাদেশ জাতীয়তাবাদী দল (বিএনপি)</div>
+        <main class="main-content">
+            <section id="calculator-form">
+                <h2 class="section-title">চাঁদা হিসাব করুন</h2>
+                <form id="chandaForm">
+                    <div class="form-group">
+                        <label for="profession">আপনার পেশা নির্বাচন করুন:</label>
+                        <select id="profession" required>
+                             <option value="">পেশা নির্বাচন করুন</option>
+                             <option value="doctor">ডাক্তার</option>
+                             <option value="engineer">প্রকৌশলী</option>
+                             <option value="teacher">শিক্ষক</option>
+                             <option value="lawyer">আইনজীবী</option>
+                             <option value="businessman">ব্যবসায়ী</option>
+                             <option value="government">সরকারি কর্মচারী</option>
+                             <option value="private">বেসরকারি কর্মচারী</option>
+                             <option value="farmer">কৃষক</option>
+                             <option value="student">ছাত্র</option>
+                             <option value="unemployed">বেকার (আন্দোলন কর্মী)</option>
+                             <option value="other">অন্যান্য</option>
+                        </select>
                     </div>
-                </div>
-                <div class="download-buttons">
-                    <button class="download-btn pdf-btn" onclick="downloadPDF()">📄 PDF ডাউনলোড</button>
-                    <button class="download-btn jpg-btn" onclick="downloadJPG()">🖼️ JPG ডাউনলোড</button>
-                    <button class="download-btn print-btn" onclick="printReceipt()">🖨️ প্রিন্ট করুন</button>
-                </div>
-            </div>
+                    <div class="form-group">
+                        <label for="salary">আপনার মাসিক আয় (টাকা):</label>
+                        <input type="number" id="salary" placeholder="उदा: 50000" required>
+                    </div>
+                    <button type="submit" class="btn btn-submit">হিসাব দেখুন</button>
+                </form>
+            </section>
 
-            <div class="chanda-usage" id="chandaUsage">
-                <h2>💰 আপনার চাঁদার টাকা যেভাবে ব্যবহৃত হবে:</h2>
-                <ul id="usageList"></ul>
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>আপনার চাঁদা হিসাব করা হচ্ছে...</p>
             </div>
-
-            <div class="charts-section" id="chartsSection">
-                <h2>📊 চাঁদার টাকার বন্টন</h2>
-                <div class="chart-container">
-                    <canvas id="chandaPieChart"></canvas>
-                </div>
+            
+            <div id="allResultsContainer">
+                <section class="section" id="results">
+                    <h2 class="section-title">ফলাফল</h2>
+                    <!-- Result items will be populated here -->
+                </section>
+                <section class="section" id="receipt">
+                    <div class="receipt-header">
+                        <h2 class="receipt-title">চাঁদা প্রাপতির রসিদ</h2>
+                        <p>বাংলাদেশ জাতীয়তাবাদী দল (বিএনপি)</p>
+                    </div>
+                    <div class="receipt-body"></div>
+                    <div class="receipt-footer">
+                        <div class="signature-section">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Tarique_Rahman_signature.svg" alt="তারেক রহমানের স্বাক্ষর" class="signature-img">
+                            <p style="border-top: 1px solid #999; padding-top: 8px; margin-top: 10px;"><strong>তারেক রহমান</strong><br>ভারপ্রাপ্ত চেয়ারম্যান, বিএনপি</p>
+                        </div>
+                    </div>
+                    <div class="download-buttons">
+                        <button class="btn download-btn pdf-btn">PDF ডাউনলোড</button>
+                        <button class="btn download-btn jpg-btn">JPG ডাউনলোড</button>
+                        <button class="btn download-btn print-btn">প্রিন্ট করুন</button>
+                    </div>
+                </section>
+                <section class="section" id="chandaUsage">
+                    <h2 class="section-title">চাঁদার টাকার সম্ভাব্য বন্টন</h2>
+                    <div class="chart-container" style="max-width: 450px; margin: auto;"><canvas id="chandaPieChart"></canvas></div>
+                </section>
+                <section class="section" id="paymentGateway">
+                     <h2 class="section-title">চাঁদা পরিশোধ করুন</h2>
+                     <div class="payment-options">
+                        <button class="btn payment-btn"><b>bKash</b></button>
+                        <button class="btn payment-btn"><b>Nagad</b></button>
+                        <button class="btn payment-btn"><b>Rocket</b></button>
+                     </div>
+                </section>
+                 <section class="section" id="extraInfo">
+                    <h2 class="section-title">অতিরিক্ত তথ্য</h2>
+                    <div class="info-card-container">
+                        <div class="info-card" id="comparisonSection">
+                            <h3>📊 তুলনামূলক বিশ্লেষণ</h3>
+                            <div id="comparisonContent"></div>
+                        </div>
+                        <div class="info-card" id="trendSection">
+                            <h3>📈 ট্রেন্ড অ্যানালাইসিস</h3>
+                            <div id="trendContent"></div>
+                        </div>
+                    </div>
+                </section>
+                <section class="section" id="leaderboardSection">
+                    <h2 class="section-title">🏆 লিডারবোর্ড</h2>
+                    <ul class="leaderboard-list"></ul>
+                </section>
             </div>
-
-            <div class="payment-gateway" id="paymentGateway">
-                <h2>💳 চাঁদা পরিশোধ করুন</h2>
-                <p>আপনার চাঁদা সরাসরি পরিশোধ করতে নিচের অপশনগুলো ব্যবহার করুন:</p>
-                <div class="payment-options">
-                    <button onclick="openModal('paymentModal', 'bKash')">বিকাশ</button>
-                    <button onclick="openModal('paymentModal', 'Nagad')">নগদ</button>
-                    <button onclick="openModal('paymentModal', 'Rocket')">রকেট</button>
-                </div>
-            </div>
-
-            <div class="leaderboard-section" id="leaderboardSection">
-                <h2>🏆 লিডারবোর্ড (শীর্ষ চাঁদা প্রদানকারী)</h2>
-                <ul class="leaderboard-list"></ul>
-            </div>
-
-            <div class="comparison-section" id="comparisonSection">
-                <h2>📊 তুলনামূলক বিশ্লেষণ</h2>
-                <div class="comparison-data"></div>
-            </div>
-
-            <div class="trend-section" id="trendSection">
-                <h2>📈 ট্রেন্ড এনালাইসিস</h2>
-                <div class="trend-data"></div>
-            </div>
-        </div>
+        </main>
+        
+        <footer class="site-footer">
+            <p>© ২০২৪ বাংলাদেশ জাতীয়তাবাদী দল (বিএনপি)। সকল অধিকার সংরক্ষিত।</p>
+            <a href="https://t.me/+1p9RnexGMP0yOGVl" target="_blank" class="btn btn-telegram" style="margin-top: 15px;">টেলিগ্রামে যোগ দিন</a>
+        </footer>
     </div>
 
-    <div class="footer">
-        <p>© ২০২৪ বাংলাদেশ জাতীয়তাবাদী দল (বিএনপি)। সকল অধিকার সংরক্ষিত।</p>
-        <p>🇧🇩 জিয়াউর রহমান অমর হোক, গণতন্ত্র মুক্তি পাক 🇧🇩</p>
-        <a href="https://t.me/+1p9RnexGMP0yOGVl" target="_blank" class="download-btn telegram-btn">
-            টেলিগ্রামে যোগ দিন
-        </a>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
     <script>
-        // Modal Logic
-        function openModal(modalId, method) {
-            const modal = document.getElementById(modalId);
-            modal.classList.add('show');
+    /**
+     * BNP Chanda Calculator Application
+     * This object encapsulates all the logic for the calculator.
+     */
+    const BnpApp = {
+        // Configuration settings
+        config: {
+            chandaRate: 0.10,
+            chandaUsageData: [
+                { item: 'দলীয় কার্যক্রম', percentage: 30 }, { item: 'আন্দোলন ও কর্মসূচি', percentage: 25 },
+                { item: 'প্রচার ও প্রচারণা', percentage: 15 }, { item: 'ত্রাণ ও সহায়তা', percentage: 10 },
+                { item: 'দপ্তর ব্যবস্থাপনা', percentage: 10 }, { item: 'অন্যান্য', percentage: 10 }
+            ],
+            leaderboardData: [
+                { rank: '🥇', name: 'খাম্বা তারেক', amount: '১,০০,০০,০০০' },
+                { rank: '🥈', name: 'বেগম খালেদা জিয়া', amount: '৫০,০০,০০০' },
+                { rank: '🥉', name: 'মির্জা ফখরুল', amount: '১০,০০,০০০' },
+                { rank: '৪', name: 'রুহুল কবির রিজভী', amount: '৫,০০,০০০' },
+                { rank: '৫', name: 'গয়েশ্বর চন্দ্র রায়', amount: '২,০০,০০০' },
+            ],
+            avgProfessionChanda: 7500, // Dummy average for comparison
+        },
+        
+        // DOM Element references
+        elements: {
+            form: document.getElementById('chandaForm'),
+            loading: document.getElementById('loading'),
+            resultsContainer: document.getElementById('allResultsContainer'),
+            modals: document.querySelectorAll('.modal-overlay'),
+            closeButtons: document.querySelectorAll('.modal-close'),
+            downloadButtons: document.querySelector('.download-buttons'),
+        },
 
-            if (modalId === 'paymentModal') {
-                document.getElementById('paymentMethodName').textContent = method;
-                document.getElementById('paymentAmountDisplay').textContent = formatMoney(monthlyChandaAmount);
-                setTimeout(() => {
-                    document.getElementById('mobileNumber').focus();
-                }, 100);
-            }
-        }
+        // Application State
+        state: {
+            monthlyChanda: 0,
+            chandaPieChart: null
+        },
 
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.remove('show');
-        }
+        /**
+         * Initializes the application, binds events and sets up the initial state.
+         */
+        init() {
+            this.bindEvents();
+            setTimeout(() => this.showModal('welcomeModal'), 2000);
+        },
 
-        // Show welcome modal after 2 seconds
-        window.onload = function() {
-            setTimeout(() => openModal('welcomeModal'), 2000);
-        };
-        // End of Modal Logic
+        /**
+         * Binds all necessary event listeners.
+         */
+        bindEvents() {
+            // Form submission
+            this.elements.form.addEventListener('submit', e => {
+                e.preventDefault();
+                this.handleFormSubmit();
+            });
 
-        // Constants and Globals
-        const professionRates = {
-            'doctor': 0.10, 'engineer': 0.10, 'teacher': 0.10, 'lawyer': 0.10,
-            'businessman': 0.10, 'government': 0.10, 'private': 0.10, 'farmer': 0.10,
-            'student': 0.10, 'housewife': 0.10, 'unemployed': 0.10, 'politician': 0.10,
-            'journalist': 0.10, 'artist': 0.10, 'other': 0.10
-        };
-
-        const professionNames = {
-            'doctor': 'ডাক্তার (চিকিৎসক)', 'engineer': 'ইঞ্জিনিয়ার (প্রকৌশলী)', 'teacher': 'শিক্ষক (গুরুমশাই)',
-            'lawyer': 'আইনজীবী (উকিল সাহেব)', 'businessman': 'ব্যবসায়ী (বড়লোক)', 'government': 'সরকারি কর্মচারী (জনগণের সেবক)',
-            'private': 'বেসরকারি কর্মচারী (দিনমজুর)', 'farmer': 'কৃষক (মাটির সন্তান)', 'student': 'ছাত্র (ভবিষ্যতের নেতা)',
-            'housewife': 'গৃহিণী (গৃহকর্ত্রী)', 'unemployed': 'বেকার (আন্দোলন কর্মী)', 'politician': 'রাজনীতিবিদ (জননেতা)',
-            'journalist': 'সাংবাদিক (কলম সৈনিক)', 'artist': 'শিল্পী (সংস্কৃতি কর্মী)', 'other': 'অন্যান্য (সাধারণ জনতা)'
-        };
-
-        const chandaUsageItems = [
-            { item: 'লন্ডনে তারেক সাহেবের বিলাসবহুল জীবনযাপন', percentage: 30 }, { item: 'আন্দোলনের নামে গাড়ি পোড়ানো ও ভাঙচুর', percentage: 20 },
-            { item: 'বিদেশি লবিস্ট নিয়োগ', percentage: 15 }, { item: 'নেতা-কর্মীদের জন্য সিঙ্গারা-সমুচা', percentage: 10 },
-            { item: 'মিথ্যা মামলা ও হয়রানি থেকে বাঁচতে আইনজীবীর ফি', percentage: 10 }, { item: 'নতুন করে দল গোছানোর চেষ্টা', percentage: 5 },
-            { item: 'অন্যান্য বিবিধ খরচ', percentage: 10 }
-        ];
-
-        let monthlyChandaAmount = 0;
-        let chandaPieChart;
-
-        // Form Submission
-        document.getElementById('chandaForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            // Modal closing events
+            this.elements.closeButtons.forEach(btn => {
+                btn.addEventListener('click', () => this.hideModal(btn.dataset.modalId));
+            });
+            this.elements.modals.forEach(modal => {
+                modal.addEventListener('click', e => {
+                    if (e.target === modal) this.hideModal(modal.id);
+                });
+            });
             
-            const profession = document.getElementById('profession').value;
-            const salary = parseFloat(document.getElementById('salary').value);
-            
-            if (!profession || !salary || salary <= 0) {
-                alert('অনুগ্রহ করে সকল তথ্য সঠিকভাবে পূরণ করুন।');
+            // Export buttons are delegated
+            this.elements.downloadButtons.addEventListener('click', e => {
+                if (e.target.classList.contains('pdf-btn')) this.export.asPDF();
+                if (e.target.classList.contains('jpg-btn')) this.export.asJPG();
+                if (e.target.classList.contains('print-btn')) this.export.asPrint();
+            });
+        },
+
+        /**
+         * Handles the main form submission logic.
+         */
+        handleFormSubmit() {
+            const salaryInput = document.getElementById('salary');
+            const salary = parseFloat(salaryInput.value);
+            if (isNaN(salary) || salary <= 0) {
+                alert('অনুগ্রহ করে একটি সঠিক মাসিক আয় লিখুন।');
+                salaryInput.focus();
                 return;
             }
 
-            document.getElementById('allResultsContainer').style.display = 'none';
-            document.getElementById('loading').style.display = 'block';
+            this.ui.showLoading(true);
+            this.ui.hideResults();
 
             setTimeout(() => {
-                calculateChanda(profession, salary);
+                const profession = document.getElementById('profession').value;
+                const calculation = this.logic.calculateChanda(salary);
+                this.state.monthlyChanda = calculation.monthly;
+
+                // Populate all UI sections with the new data
+                this.ui.populateResults(calculation);
+                this.ui.populateReceipt(calculation, profession);
+                this.ui.createPieChart();
+                this.ui.populateLeaderboard();
+                this.ui.populateExtraInfo(calculation.monthly);
+
+                this.ui.showLoading(false);
+                this.ui.showResults();
                 
-                document.getElementById('loading').style.display = 'none';
-                const allResultsContainer = document.getElementById('allResultsContainer');
-                allResultsContainer.style.display = 'block';
-                
-                // Show individual sections
-                ['results', 'receipt', 'chandaUsage', 'chartsSection', 'paymentGateway'].forEach(id => {
-                    document.getElementById(id).style.display = 'block';
+                // Scroll to the results smoothly
+                this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 1500);
+        },
+
+        /**
+         * Contains business logic for calculations and formatting.
+         */
+        logic: {
+            calculateChanda(salary) {
+                const rate = BnpApp.config.chandaRate;
+                const monthly = Math.round(salary * rate);
+                const yearly = monthly * 12;
+                return { salary, monthly, yearly, rate };
+            },
+            formatMoney(amount) {
+                return new Intl.NumberFormat('bn-BD', { style: 'currency', currency: 'BDT', minimumFractionDigits: 0 }).format(amount);
+            },
+        },
+
+        /**
+         * UI manipulation methods.
+         */
+        ui: {
+            showModal(modalId) { document.getElementById(modalId).classList.add('show'); },
+            hideModal(modalId) { document.getElementById(modalId).classList.remove('show'); },
+            showLoading(isLoading) { BnpApp.elements.loading.style.display = isLoading ? 'block' : 'none'; },
+            showResults() {
+                const container = BnpApp.elements.resultsContainer;
+                container.style.display = 'block';
+                container.querySelectorAll('.section').forEach(el => el.classList.add('fade-in-up'));
+            },
+            hideResults() { BnpApp.elements.resultsContainer.style.display = 'none'; },
+
+            populateResults(data) {
+                const container = document.getElementById('results');
+                container.innerHTML = `
+                    <h2 class="section-title">ফলাফল</h2>
+                    <div class="result-item"><span>মাসিক আয়:</span><span class="result-value">${BnpApp.logic.formatMoney(data.salary)}</span></div>
+                    <div class="result-item"><span>চাঁদার হার:</span><span class="result-value">${data.rate * 100}%</span></div>
+                    <div class="result-item"><span>মাসিক চাঁদা:</span><span class="result-value">${BnpApp.logic.formatMoney(data.monthly)}</span></div>
+                    <div class="result-item"><span>বার্ষিক চাঁদা:</span><span class="result-value">${BnpApp.logic.formatMoney(data.yearly)}</span></div>
+                `;
+            },
+            
+            populateReceipt(data, profession) {
+                const body = document.querySelector('#receipt .receipt-body');
+                const profText = document.querySelector(`#profession option[value="${profession}"]`).textContent;
+                body.innerHTML = `
+                    <div class="result-item"><span>রসিদ নং:</span><span>BNP-${Date.now().toString().substr(-6)}</span></div>
+                    <div class="result-item"><span>তারিখ:</span><span>${new Date().toLocaleDateString('bn-BD')}</span></div>
+                    <div class="result-item"><span>সদস্যের পেশা:</span><span>${profText}</span></div>
+                    <div class="result-item"><span>মাসিক আয়:</span><span>${BnpApp.logic.formatMoney(data.salary)}</span></div>
+                    <div class="result-item"><span>মাসিক চাঁদা:</span><span><strong>${BnpApp.logic.formatMoney(data.monthly)}</strong></span></div>
+                `;
+            },
+
+            createPieChart() {
+                const ctx = document.getElementById('chandaPieChart').getContext('2d');
+                if (BnpApp.state.chandaPieChart) BnpApp.state.chandaPieChart.destroy();
+                BnpApp.state.chandaPieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: BnpApp.config.chandaUsageData.map(d => d.item),
+                        datasets: [{
+                            data: BnpApp.config.chandaUsageData.map(d => d.percentage),
+                            backgroundColor: ['#006a4e', '#f42a41', '#f9a825', '#0088cc', '#2ecc71', '#9b59b6'],
+                            borderColor: '#fff', borderWidth: 2
+                        }]
+                    },
+                    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { family: "'Hind Siliguri', sans-serif" } } } } }
                 });
+            },
 
-                showNotification('রসিদ তৈরি হয়েছে!', 'success');
-
-                // *** SCROLL TO RESULTS ***
-                allResultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-            }, 2000);
-        });
-
-        function calculateChanda(profession, salary) {
-            const rate = professionRates[profession] || 0.10;
-            monthlyChandaAmount = Math.round(salary * rate);
-            const yearlyChanda = monthlyChandaAmount * 12;
-
-            // Update result values
-            document.getElementById('monthlyIncome').textContent = formatMoney(salary);
-            document.getElementById('chandaRate').textContent = (rate * 100) + '%';
-            document.getElementById('monthlyChanda').textContent = formatMoney(monthlyChandaAmount);
-            document.getElementById('yearlyChanda').textContent = formatMoney(yearlyChanda);
-
-            // Update receipt details
-            populateReceipt(profession, salary, rate, monthlyChandaAmount, yearlyChanda);
+            populateLeaderboard() {
+                const list = document.querySelector('.leaderboard-list');
+                list.innerHTML = BnpApp.config.leaderboardData.map(item => `
+                    <li>
+                        <span class="rank">${item.rank}</span>
+                        <span class="name">${item.name}</span>
+                        <span class="amount">${BnpApp.logic.formatMoney(item.amount)}</span>
+                    </li>
+                `).join('');
+            },
             
-            // Populate Chanda Usage List
-            populateUsageList();
-
-            // Update Pie Chart
-            updateChandaPieChart();
-        }
-
-        // DOM Population Functions
-        function populateReceipt(profession, salary, rate, monthly, yearly) {
-            const receiptBody = document.querySelector('#receipt .receipt-body');
-            const now = new Date();
-            document.getElementById('receiptDate').textContent = now.toLocaleDateString('bn-BD');
-            document.getElementById('receiptNumber').textContent = 'BNP-' + Date.now().toString().substr(-6);
-            
-            receiptBody.innerHTML = `
-                <div class="receipt-row"><span>সদস্যের নাম:</span><span>সম্মানিত সদস্য</span></div>
-                <div class="receipt-row"><span>পেশা:</span><span>${professionNames[profession]}</span></div>
-                <div class="receipt-row"><span>মাসিক আয়:</span><span>${formatMoney(salary)}</span></div>
-                <div class="receipt-row"><span>চাঁদার হার:</span><span>${(rate * 100)}%</span></div>
-                <div class="receipt-row"><span><strong>মাসিক চাঁদা:</strong></span><span><strong>${formatMoney(monthly)}</strong></span></div>
-                <div class="receipt-row"><span><strong>বার্ষিক চাঁদা:</strong></span><span><strong>${formatMoney(yearly)}</strong></span></div>
-            `;
-        }
-
-        function populateUsageList() {
-            const usageList = document.getElementById('usageList');
-            usageList.innerHTML = '';
-            chandaUsageItems.forEach(item => {
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `<span>${item.item}</span> <span>${item.percentage}%</span>`;
-                usageList.appendChild(listItem);
-            });
-        }
-        
-        function updateChandaPieChart() {
-            const ctx = document.getElementById('chandaPieChart').getContext('2d');
-            if (chandaPieChart) {
-                chandaPieChart.destroy();
-            }
-            chandaPieChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: chandaUsageItems.map(item => item.item),
-                    datasets: [{
-                        data: chandaUsageItems.map(item => item.percentage),
-                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#E7E9ED'],
-                        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#E7E9ED']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: { legend: { labels: { color: 'white' } } }
+            populateExtraInfo(userChanda) {
+                const avgChanda = BnpApp.config.avgProfessionChanda;
+                let comparisonText = '';
+                if (userChanda > avgChanda) {
+                    comparisonText = `আপনি গড় চাঁদা (${BnpApp.logic.formatMoney(avgChanda)}) থেকে বেশি দিচ্ছেন। আপনার অবদান প্রশংসার যোগ্য!`;
+                } else {
+                    comparisonText = `আপনার চাঁদা গড় চাঁদা (${BnpApp.logic.formatMoney(avgChanda)}) থেকে কম। আপনার অবদান আরও প্রয়োজন।`;
                 }
-            });
-        }
+                
+                document.getElementById('comparisonContent').innerHTML = `<p>আপনার মাসিক চাঁদা: <strong>${BnpApp.logic.formatMoney(userChanda)}</strong></p><p>${comparisonText}</p>`;
+                document.getElementById('trendContent').innerHTML = `<p>গত ৬ মাসে চাঁদা সংগ্রহ: <span style="color: #006a4e;">২৫% বৃদ্ধি</span></p><p>আগামী ৩ মাসের পূর্বাভাস: <span style="color: #f1c40f; font-weight: bold;">স্থিতিশীল</span></p>`;
+            }
+        },
         
-        // Utility Functions
-        function formatMoney(amount) {
-            return new Intl.NumberFormat('bn-BD').format(amount) + ' টাকা';
-        }
-
-        function toggleMenu() {
-            document.getElementById('mobileMenu').classList.toggle('active');
-        }
-
-        function downloadPDF() {
-            showNotification('PDF তৈরি করা হচ্ছে...', 'info');
-            const receiptElement = document.getElementById('receipt');
-            html2canvas(receiptElement).then(canvas => {
-                const { jsPDF } = window.jspdf;
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                pdf.save("chanda-receipt.pdf");
-                showNotification('PDF ডাউনলোড সফল হয়েছে!', 'success');
-            });
-        }
-
-        function downloadJPG() {
-            showNotification('JPG তৈরি করা হচ্ছে...', 'info');
-            html2canvas(document.getElementById('receipt')).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'chanda-receipt.jpg';
-                link.href = canvas.toDataURL('image/jpeg', 0.9);
-                link.click();
-                showNotification('JPG ডাউনলোড সফল হয়েছে!', 'success');
-            });
-        }
-
-        function printReceipt() {
-            const printWindow = window.open('', '_blank');
-            const receiptHTML = document.getElementById('receipt').outerHTML;
-            printWindow.document.write(`
-                <html><head><title>চাঁদার রসিদ</title>
-                <style>
-                    body { font-family: Arial, sans-serif; margin: 20px; }
-                    .receipt { max-width: 600px; margin: 0 auto; border: 1px solid #ccc; padding: 20px; }
-                    .receipt-header, .receipt-footer, .signature-section { text-align: center; }
-                    .receipt-header { border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 20px; }
-                    .receipt-footer { border-top: 2px solid #333; padding-top: 20px; margin-top: 30px; }
-                    .receipt-title { font-size: 1.8rem; font-weight: bold; }
-                    .receipt-subtitle { font-size: 1.2rem; font-weight: bold; margin: 10px 0; }
-                    .receipt-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dotted #ccc; }
-                    .signature-img { max-width: 150px; }
-                    .signature-name { font-weight: bold; }
-                    .download-buttons { display: none; }
-                </style>
-                </head><body>${receiptHTML}</body></html>
-            `);
-            printWindow.document.close();
-            setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
-        }
-
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            const colors = { success: '#2ecc71', error: '#e74c3c', info: '#3498db' };
-            notification.style.cssText = `
-                position: fixed; top: 20px; right: 20px;
-                background: ${colors[type]}; color: white;
-                padding: 15px 20px; border-radius: 10px; font-weight: bold;
-                z-index: 10000; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-                transform: translateX(120%); animation: slideInAndOut 3s ease;
-            `;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            setTimeout(() => { notification.remove(); }, 3000);
-        }
-        
-        const keyframes = `@keyframes slideInAndOut {
-            0% { transform: translateX(120%); }
-            15% { transform: translateX(0); }
-            85% { transform: translateX(0); }
-            100% { transform: translateX(120%); }
-        }`;
-        const styleSheet = document.createElement("style");
-        styleSheet.innerText = keyframes;
-        document.head.appendChild(styleSheet);
-
-
-        function confirmPayment() {
-            if (document.getElementById('mobileNumber').value && document.getElementById('pin').value) {
-                showNotification(`আপনার ${formatMoney(monthlyChandaAmount)} চাঁদা সফলভাবে পরিশোধ হয়েছে!`, 'success');
-                closeModal('paymentModal');
-            } else {
-                showNotification('মোবাইল নম্বর এবং পিন দিন।', 'error');
+        /**
+         * Methods for exporting content as PDF, JPG or printing.
+         */
+        export: {
+            asPDF() {
+                html2canvas(document.getElementById('receipt'), { scale: 2 }).then(canvas => {
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                    pdf.addImage(imgData, 'PNG', 5, 5, pdfWidth - 10, pdfHeight - 10);
+                    pdf.save('BNP-Chanda-Receipt.pdf');
+                });
+            },
+            asJPG() {
+                html2canvas(document.getElementById('receipt'), { scale: 2 }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = 'BNP-Chanda-Receipt.jpg';
+                    link.href = canvas.toDataURL('image/jpeg', 1.0);
+                    link.click();
+                });
+            },
+            asPrint() {
+                const receiptHTML = document.getElementById('receipt').innerHTML;
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(`
+                    <html><head><title>রসিদ প্রিন্ট</title><style>body {font-family: sans-serif;} .receipt {max-width: 600px; margin: auto;} .receipt-header, .receipt-footer {text-align: center;} .result-item {display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dotted #ccc;} .signature-section {margin-top: 40px;} .download-buttons {display: none;}</style></head>
+                    <body><div class="receipt">${receiptHTML}</div></body></html>
+                `);
+                printWindow.document.close();
+                setTimeout(() => { printWindow.print(); printWindow.close(); }, 300);
             }
         }
+    };
+
+    // Initialize the application once the DOM is ready
+    document.addEventListener('DOMContentLoaded', () => BnpApp.init());
+    
     </script>
 </body>
 </html>
