@@ -264,7 +264,6 @@
             
             <div id="allResultsContainer">
                 <section class="section" id="results">
-                    <h2 class="section-title">ফলাফল</h2>
                     <!-- Result items will be populated here -->
                 </section>
                 <section class="section" id="receipt">
@@ -333,9 +332,12 @@
         config: {
             chandaRate: 0.10,
             chandaUsageData: [
-                { item: 'দলীয় কার্যক্রম', percentage: 30 }, { item: 'আন্দোলন ও লোক ভাড়া খরচ', percentage: 25 },
-                { item: 'প্রচার ও প্রচারণা', percentage: 15 }, { item: 'সিঙ্গারা আর 7Up খরচ, percentage: 10 },
-                { item: 'দপ্তর ব্যবস্থাপনা', percentage: 10 }, { item: 'অন্যান্য', percentage: 10 }
+                { item: 'দলীয় কার্যক্রম', percentage: 30 }, 
+                { item: 'আন্দোলন ও লোক ভাড়া খরচ', percentage: 25 },
+                { item: 'প্রচার ও প্রচারণা', percentage: 15 }, 
+                { item: 'সিঙ্গারা আর 7Up খরচ', percentage: 10 },
+                { item: 'দপ্তর ব্যবস্থাপনা', percentage: 10 }, 
+                { item: 'অন্যান্য', percentage: 10 }
             ],
             leaderboardData: [
                 { rank: '🥇', name: 'খাম্বা তারেক', amount: '১,০০,০০,০০০' },
@@ -368,34 +370,31 @@
          */
         init() {
             this.bindEvents();
-            setTimeout(() => this.showModal('welcomeModal'), 2000);
+            setTimeout(() => this.ui.showModal('welcomeModal'), 2000);
         },
 
         /**
          * Binds all necessary event listeners.
          */
         bindEvents() {
-            // Form submission
             this.elements.form.addEventListener('submit', e => {
                 e.preventDefault();
                 this.handleFormSubmit();
             });
-
-            // Modal closing events
             this.elements.closeButtons.forEach(btn => {
-                btn.addEventListener('click', () => this.hideModal(btn.dataset.modalId));
+                btn.addEventListener('click', () => this.ui.hideModal(btn.dataset.modalId));
             });
             this.elements.modals.forEach(modal => {
                 modal.addEventListener('click', e => {
-                    if (e.target === modal) this.hideModal(modal.id);
+                    if (e.target === modal) this.ui.hideModal(modal.id);
                 });
             });
-            
-            // Export buttons are delegated
             this.elements.downloadButtons.addEventListener('click', e => {
-                if (e.target.classList.contains('pdf-btn')) this.export.asPDF();
-                if (e.target.classList.contains('jpg-btn')) this.export.asJPG();
-                if (e.target.classList.contains('print-btn')) this.export.asPrint();
+                const targetButton = e.target.closest('button');
+                if (!targetButton) return;
+                if (targetButton.classList.contains('pdf-btn')) this.export.asPDF();
+                if (targetButton.classList.contains('jpg-btn')) this.export.asJPG();
+                if (targetButton.classList.contains('print-btn')) this.export.asPrint();
             });
         },
 
@@ -419,7 +418,6 @@
                 const calculation = this.logic.calculateChanda(salary);
                 this.state.monthlyChanda = calculation.monthly;
 
-                // Populate all UI sections with the new data
                 this.ui.populateResults(calculation);
                 this.ui.populateReceipt(calculation, profession);
                 this.ui.createPieChart();
@@ -429,7 +427,6 @@
                 this.ui.showLoading(false);
                 this.ui.showResults();
                 
-                // Scroll to the results smoothly
                 this.elements.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 1500);
         },
@@ -445,6 +442,10 @@
                 return { salary, monthly, yearly, rate };
             },
             formatMoney(amount) {
+                // Check if the amount is a string with Bengali numerals, if so, return it as is with 'টাকা'.
+                if(typeof amount === 'string' && isNaN(amount)) {
+                    return `${amount} টাকা`;
+                }
                 return new Intl.NumberFormat('bn-BD', { style: 'currency', currency: 'BDT', minimumFractionDigits: 0 }).format(amount);
             },
         },
@@ -528,9 +529,6 @@
             }
         },
         
-        /**
-         * Methods for exporting content as PDF, JPG or printing.
-         */
         export: {
             asPDF() {
                 html2canvas(document.getElementById('receipt'), { scale: 2 }).then(canvas => {
@@ -555,8 +553,8 @@
                 const receiptHTML = document.getElementById('receipt').innerHTML;
                 const printWindow = window.open('', '_blank');
                 printWindow.document.write(`
-                    <html><head><title>রসিদ প্রিন্ট</title><style>body {font-family: sans-serif;} .receipt {max-width: 600px; margin: auto;} .receipt-header, .receipt-footer {text-align: center;} .result-item {display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dotted #ccc;} .signature-section {margin-top: 40px;} .download-buttons {display: none;}</style></head>
-                    <body><div class="receipt">${receiptHTML}</div></body></html>
+                    <html><head><title>রসিদ প্রিন্ট</title><style>body {font-family: sans-serif;} #receipt {max-width: 600px; margin: auto;} .receipt-header, .receipt-footer, .signature-section {text-align: center;} .result-item {display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dotted #ccc;} .signature-img {max-width: 150px;} .download-buttons {display: none;}</style></head>
+                    <body><div id="receipt">${receiptHTML}</div></body></html>
                 `);
                 printWindow.document.close();
                 setTimeout(() => { printWindow.print(); printWindow.close(); }, 300);
@@ -564,7 +562,6 @@
         }
     };
 
-    // Initialize the application once the DOM is ready
     document.addEventListener('DOMContentLoaded', () => BnpApp.init());
     
     </script>
