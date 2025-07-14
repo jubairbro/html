@@ -40,6 +40,10 @@
             font-size: 16px;
             line-height: 1.6;
         }
+        /* Ensuring consistent font application */
+        button, input, select, textarea {
+            font-family: inherit;
+        }
 
         /* --- Main Container & Layout --- */
         .container {
@@ -56,7 +60,7 @@
             padding: 25px 30px;
             text-align: center;
         }
-        .site-header h1 { font-size: 2.5rem; }
+        .site-header h1 { font-size: 2.5rem; font-weight: 700; }
         .site-header p { font-size: 1.2rem; opacity: 0.9; }
         .main-content { padding: 30px; }
         .site-footer {
@@ -73,6 +77,9 @@
             padding: 25px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
+            opacity: 0;
+        }
+        .section.visible {
             animation: fadeInUp 0.7s ease-out forwards;
         }
         .section-title {
@@ -104,6 +111,7 @@
             padding: 12px 15px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
+            font-size: 1rem;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
         select:focus, input:focus {
@@ -116,15 +124,17 @@
         .btn {
             color: var(--text-light);
             border: none;
-            padding: 12px 30px;
+            padding: 12px 25px;
             border-radius: 6px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            display: inline-block;
-            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         .btn-submit { background-color: var(--govt-red); width: 100%; margin-top: 10px; }
         .btn-submit:hover { background-color: #d32032; transform: translateY(-2px); }
@@ -151,23 +161,25 @@
 
         #paymentGateway { background-color: var(--info-blue); }
         .payment-options { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .payment-btn { background-color: #fff; border: 1px solid var(--border-color); color: var(--text-dark); display: flex; align-items: center; gap: 8px; }
-        .payment-btn:hover { background-color: #e9ecef; }
+        .payment-btn { background-color: #fff; border: 1px solid var(--border-color); color: var(--text-dark); padding: 10px 20px; }
+        .payment-btn:hover { background-color: #e9ecef; box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+        .payment-btn img { height: 24px; }
+        .payment-btn span { font-weight: 600; }
 
         #leaderboardSection { background-color: #2c3e50; color: var(--text-light); }
         #leaderboardSection .section-title { color: #f1c40f; }
         .leaderboard-list { list-style: none; padding: 0; }
         .leaderboard-list li { display: flex; align-items: center; background: rgba(255,255,255,0.1); padding: 12px 15px; border-radius: 6px; margin-bottom: 10px; }
-        .leaderboard-list li .rank { font-size: 1.2rem; font-weight: 700; margin-right: 15px; }
+        .leaderboard-list li .rank { font-size: 1.2rem; font-weight: 700; margin-right: 15px; width: 30px; text-align: center; }
         .leaderboard-list li .name { flex-grow: 1; }
         .leaderboard-list li .amount { font-weight: 600; }
         .leaderboard-list li:nth-child(-n+3) .rank { color: #f1c40f; }
 
         .info-card-container { display: flex; gap: 20px; flex-wrap: wrap; }
         .info-card { flex: 1; min-width: 250px; background-color: var(--info-blue); padding: 20px; border-radius: 8px; border-left: 5px solid var(--info-blue-dark); }
-        .info-card h3 { margin-bottom: 10px; color: var(--info-blue-dark); }
-        #trendSection .info-card { border-left-color: #f1c40f; }
-        #trendSection h3 { color: #f1c40f; }
+        .info-card h3 { margin-bottom: 10px; color: var(--info-blue-dark); display: flex; align-items: center; gap: 8px; }
+        #trendSection .info-card { border-left-color: #e67e22; }
+        #trendSection h3 { color: #e67e22; }
 
         /* --- Modal (Dialog Box) --- */
         .modal-overlay {
@@ -194,9 +206,6 @@
         .modal-close:hover { color: var(--text-dark); }
         #welcomeModal .modal-content h2 { color: var(--govt-green); font-size: 1.6rem; }
         
-        /* --- Hamburger Menu & Mobile --- */
-        .hamburger { display: none; } /* Kept for potential future use */
-
         /* --- Animations & Loading --- */
         #allResultsContainer { display: none; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -263,9 +272,7 @@
             </div>
             
             <div id="allResultsContainer">
-                <section class="section" id="results">
-                    <!-- Result items will be populated here -->
-                </section>
+                <section class="section" id="results"></section>
                 <section class="section" id="receipt">
                     <div class="receipt-header">
                         <h2 class="receipt-title">চাঁদা প্রাপতির রসিদ</h2>
@@ -291,16 +298,25 @@
                 <section class="section" id="paymentGateway">
                      <h2 class="section-title">চাঁদা পরিশোধ করুন</h2>
                      <div class="payment-options">
-                        <button class="btn payment-btn"><b>bKash</b></button>
-                        <button class="btn payment-btn"><b>Nagad</b></button>
-                        <button class="btn payment-btn"><b>Rocket</b></button>
+                        <button class="btn payment-btn" data-method="bKash">
+                            <img src="https://cdn.svgporn.com/logos/bkash.svg" alt="bKash Logo">
+                            <span>বিকাশ</span>
+                        </button>
+                        <button class="btn payment-btn" data-method="Nagad">
+                            <img src="https://cdn.svgporn.com/logos/nagad.svg" alt="Nagad Logo">
+                            <span>নগদ</span>
+                        </button>
+                        <button class="btn payment-btn" data-method="Rocket">
+                            <img src="https://media.licdn.com/dms/image/D560BAQEg2I4gMyV5kw/company-logo_200_200/0/1693892318764/dutchbanglabank_logo?e=2147483647&v=beta&t=48VqnJp6uCFVlK9opT42HOD1Jp20R2biv0yqfXcUJdY" alt="Rocket Logo" style="border-radius: 5px;">
+                            <span>রকেট</span>
+                        </button>
                      </div>
                 </section>
                  <section class="section" id="extraInfo">
                     <h2 class="section-title">অতিরিক্ত তথ্য</h2>
                     <div class="info-card-container">
                         <div class="info-card" id="comparisonSection">
-                            <h3>📊 তুলনামূলক বিশ্লেষণ</h3>
+                             <h3>📊 তুলনামূলক বিশ্লেষণ</h3>
                             <div id="comparisonContent"></div>
                         </div>
                         <div class="info-card" id="trendSection">
@@ -323,12 +339,7 @@
     </div>
 
     <script>
-    /**
-     * BNP Chanda Calculator Application
-     * This object encapsulates all the logic for the calculator.
-     */
     const BnpApp = {
-        // Configuration settings
         config: {
             chandaRate: 0.10,
             chandaUsageData: [
@@ -340,16 +351,14 @@
                 { item: 'অন্যান্য', percentage: 10 }
             ],
             leaderboardData: [
-                { rank: '🥇', name: 'খাম্বা তারেক', amount: '১,০০,০০,০০০' },
-                { rank: '🥈', name: 'বেগুন খালেদা জিয়া', amount: '৫০,০০,০০০' },
-                { rank: '🥉', name: 'মির্জা ফখরুল', amount: '১০,০০,০০০' },
-                { rank: '৪', name: 'রুহুল কবির রিজভী', amount: '৫,০০,০০০' },
-                { rank: '৫', name: 'গয়েশ্বর চন্দ্র রায়', amount: '২,০০,০০০' },
+                { rank: '🥇', name: 'খাম্বা তারেক', amount: '10000000' },
+                { rank: '🥈', name: 'বেগুন খালেদা জিয়া', amount: '5000000' },
+                { rank: '🥉', name: 'মির্জা ফখরুল', amount: '1000000' },
+                { rank: '৪', name: 'রুহুল কবির রিজভী', amount: '500000' },
+                { rank: '৫', name: 'গয়েশ্বর চন্দ্র রায়', amount: '200000' },
             ],
-            avgProfessionChanda: 7500, // Dummy average for comparison
+            avgProfessionChanda: 7500,
         },
-        
-        // DOM Element references
         elements: {
             form: document.getElementById('chandaForm'),
             loading: document.getElementById('loading'),
@@ -357,25 +366,18 @@
             modals: document.querySelectorAll('.modal-overlay'),
             closeButtons: document.querySelectorAll('.modal-close'),
             downloadButtons: document.querySelector('.download-buttons'),
+            paymentOptions: document.querySelector('.payment-options'),
         },
-
-        // Application State
         state: {
             monthlyChanda: 0,
             chandaPieChart: null
         },
 
-        /**
-         * Initializes the application, binds events and sets up the initial state.
-         */
         init() {
             this.bindEvents();
             setTimeout(() => this.ui.showModal('welcomeModal'), 2000);
         },
 
-        /**
-         * Binds all necessary event listeners.
-         */
         bindEvents() {
             this.elements.form.addEventListener('submit', e => {
                 e.preventDefault();
@@ -396,11 +398,14 @@
                 if (targetButton.classList.contains('jpg-btn')) this.export.asJPG();
                 if (targetButton.classList.contains('print-btn')) this.export.asPrint();
             });
+            this.elements.paymentOptions.addEventListener('click', e => {
+                 const targetButton = e.target.closest('button');
+                 if(!targetButton) return;
+                 const method = targetButton.dataset.method;
+                 alert(`${method} পেমেন্ট গেটওয়েতে আপনাকে নিয়ে যাওয়া হচ্ছে... (এটি একটি ডেমো)`);
+            });
         },
 
-        /**
-         * Handles the main form submission logic.
-         */
         handleFormSubmit() {
             const salaryInput = document.getElementById('salary');
             const salary = parseFloat(salaryInput.value);
@@ -431,9 +436,6 @@
             }, 1500);
         },
 
-        /**
-         * Contains business logic for calculations and formatting.
-         */
         logic: {
             calculateChanda(salary) {
                 const rate = BnpApp.config.chandaRate;
@@ -442,17 +444,10 @@
                 return { salary, monthly, yearly, rate };
             },
             formatMoney(amount) {
-                // Check if the amount is a string with Bengali numerals, if so, return it as is with 'টাকা'.
-                if(typeof amount === 'string' && isNaN(amount)) {
-                    return `${amount} টাকা`;
-                }
                 return new Intl.NumberFormat('bn-BD', { style: 'currency', currency: 'BDT', minimumFractionDigits: 0 }).format(amount);
             },
         },
 
-        /**
-         * UI manipulation methods.
-         */
         ui: {
             showModal(modalId) { document.getElementById(modalId).classList.add('show'); },
             hideModal(modalId) { document.getElementById(modalId).classList.remove('show'); },
@@ -460,9 +455,15 @@
             showResults() {
                 const container = BnpApp.elements.resultsContainer;
                 container.style.display = 'block';
-                container.querySelectorAll('.section').forEach(el => el.classList.add('fade-in-up'));
+                container.querySelectorAll('.section').forEach(el => {
+                    el.style.opacity = '0'; // Reset for animation
+                    el.classList.add('visible');
+                });
             },
-            hideResults() { BnpApp.elements.resultsContainer.style.display = 'none'; },
+            hideResults() { 
+                BnpApp.elements.resultsContainer.style.display = 'none'; 
+                BnpApp.elements.resultsContainer.querySelectorAll('.section').forEach(el => el.classList.remove('visible'));
+            },
 
             populateResults(data) {
                 const container = document.getElementById('results');
@@ -525,24 +526,24 @@
                 }
                 
                 document.getElementById('comparisonContent').innerHTML = `<p>আপনার মাসিক চাঁদা: <strong>${BnpApp.logic.formatMoney(userChanda)}</strong></p><p>${comparisonText}</p>`;
-                document.getElementById('trendContent').innerHTML = `<p>গত ৬ মাসে চাঁদা সংগ্রহ: <span style="color: #006a4e;">২৫% বৃদ্ধি</span></p><p>আগামী ৩ মাসের পূর্বাভাস: <span style="color: #f1c40f; font-weight: bold;">স্থিতিশীল</span></p>`;
+                document.getElementById('trendContent').innerHTML = `<p>গত ৬ মাসে চাঁদা সংগ্রহ: <span style="color: var(--govt-green); font-weight: 600;">২৫% বৃদ্ধি</span></p><p>আগামী ৩ মাসের পূর্বাভাস: <span style="color: #e67e22; font-weight: 600;">স্থিতিশীল</span></p>`;
             }
         },
         
         export: {
             asPDF() {
-                html2canvas(document.getElementById('receipt'), { scale: 2 }).then(canvas => {
+                html2canvas(document.getElementById('receipt'), { scale: 2, useCORS: true }).then(canvas => {
                     const { jsPDF } = window.jspdf;
                     const pdf = new jsPDF('p', 'mm', 'a4');
                     const imgData = canvas.toDataURL('image/png');
                     const pdfWidth = pdf.internal.pageSize.getWidth();
                     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                    pdf.addImage(imgData, 'PNG', 5, 5, pdfWidth - 10, pdfHeight - 10);
+                    pdf.addImage(imgData, 'PNG', 5, 5, pdfWidth - 10, pdfHeight - 10 > 297 ? 280 : pdfHeight - 10);
                     pdf.save('BNP-Chanda-Receipt.pdf');
                 });
             },
             asJPG() {
-                html2canvas(document.getElementById('receipt'), { scale: 2 }).then(canvas => {
+                html2canvas(document.getElementById('receipt'), { scale: 2, useCORS: true }).then(canvas => {
                     const link = document.createElement('a');
                     link.download = 'BNP-Chanda-Receipt.jpg';
                     link.href = canvas.toDataURL('image/jpeg', 1.0);
@@ -550,14 +551,17 @@
                 });
             },
             asPrint() {
-                const receiptHTML = document.getElementById('receipt').innerHTML;
+                const receiptElement = document.getElementById('receipt');
+                const receiptHTML = receiptElement.innerHTML;
                 const printWindow = window.open('', '_blank');
+                const styles = Array.from(document.styleSheets).map(s => s.href ? `<link rel="stylesheet" href="${s.href}">` : `<style>${Array.from(s.cssRules).map(r => r.cssText).join('')}</style>`).join('');
+                
                 printWindow.document.write(`
-                    <html><head><title>রসিদ প্রিন্ট</title><style>body {font-family: sans-serif;} #receipt {max-width: 600px; margin: auto;} .receipt-header, .receipt-footer, .signature-section {text-align: center;} .result-item {display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dotted #ccc;} .signature-img {max-width: 150px;} .download-buttons {display: none;}</style></head>
-                    <body><div id="receipt">${receiptHTML}</div></body></html>
+                    <html><head><title>রসিদ প্রিন্ট</title>${styles}<style>body { margin: 20px; } .download-buttons {display: none !important;} #receipt { border: none !important; margin: 0; box-shadow: none;}</style></head>
+                    <body><div class="section" id="receipt">${receiptHTML}</div></body></html>
                 `);
                 printWindow.document.close();
-                setTimeout(() => { printWindow.print(); printWindow.close(); }, 300);
+                setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
             }
         }
     };
