@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Premium Services by Jubair</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        @property --angle {
+          syntax: '<angle>';
+          initial-value: 0deg;
+          inherits: false;
+        }
+
+        :root {
+            --bg-main: #101418;
+            --bg-card: #181c20;
+            --bg-inset: #0c0f12;
+            --text-main: #c0caf5;
+            --text-bright: #ffffff;
+            --text-label: #a9b1d6;
+            --accent: #00ff41; /* Hacker Green */
+            --accent-hover: #00e031;
+            --border-glow: #00ff41;
+            --youtube-red: #ff0000;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+        }
+        
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(16, 20, 24, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-out;
+        }
+        .login-box {
+            background-color: var(--bg-card);
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid var(--border-glow);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
+        .login-box h1 { font-size: 1.8rem; color: var(--text-bright); margin-bottom: 10px; }
+        .login-box p { color: var(--text-label); margin-bottom: 25px; }
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background-color: var(--bg-inset);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            color: var(--text-bright);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .login-btn, .get-access-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .login-btn { background-color: var(--accent); color: var(--bg-main); }
+        .get-access-btn {
+            background: none;
+            color: var(--accent);
+            text-decoration: none;
+            display: block;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        #login-error { color: #f7768e; margin-top: 15px; font-size: 0.9rem; display: none; }
+
+        /* YouTube Popup Styles */
+        #youtube-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(16, 20, 24, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 3000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease-in-out;
+        }
+        #youtube-popup-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .popup-box {
+            background-color: var(--bg-card);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            width: 90%;
+            max-width: 420px;
+            border: 1px solid var(--youtube-red);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        }
+        #youtube-popup-overlay.visible .popup-box {
+            transform: scale(1);
+        }
+        .popup-box .icon {
+            font-size: 3rem;
+            color: var(--youtube-red);
+            margin-bottom: 15px;
+        }
+        .popup-box h2 {
+            font-size: 1.6rem;
+            color: var(--text-bright);
+            margin-bottom: 10px;
+        }
+        .popup-box p {
+            color: var(--text-label);
+            margin-bottom: 25px;
+        }
+        .popup-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .subscribe-btn {
+            background-color: var(--youtube-red);
+            color: white;
+        }
+        .subscribe-btn:hover {
+            opacity: 0.9;
+        }
+        .close-btn {
+            background-color: var(--bg-inset);
+            color: var(--text-label);
+            cursor: pointer;
+            border: none;
+        }
+        .close-btn:hover {
+            background-color: #2a2e32;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 15px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+            pointer-events: none;
+        }
+        .main-container.visible { opacity: 1; pointer-events: auto; }
+
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text-bright); margin-bottom: 8px; }
+        header .subtitle { font-size: clamp(0.9rem, 2.5vw, 1.1rem); color: var(--accent); }
+        
+        .action-button-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .action-btn {
+            background: var(--accent);
+            color: var(--bg-main);
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .action-btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.2);
+        }
+        
+        /* Scroll Animation */
+        .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        
+        .card {
+            border-radius: 16px;
+            padding: 2px;
+            background: conic-gradient(from var(--angle), var(--bg-main), var(--border-glow) 20%, var(--bg-main) 35%);
+            animation: rotate-border 4s linear infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        @keyframes rotate-border { to { --angle: 360deg; } }
+        
+        .card-content {
+            background-color: var(--bg-card);
+            border-radius: 14px;
+            padding: 25px;
+            height: 100%;
+        }
+        .card h2 { font-size: 1.3rem; color: var(--accent); margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #2a2e32; display: flex; align-items: center; gap: 10px; }
+        
+        .info-list { display: flex; flex-direction: column; gap: 4px; }
+        .info-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 5px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); gap: 15px; }
+        .info-item:last-child { border-bottom: none; }
+        .info-item .label { color: var(--text-label); font-weight: 600; font-size: 0.85rem; flex-shrink: 0; }
+        .info-item .value { color: var(--text-bright); font-family: 'JetBrains Mono', monospace; word-break: break-all; font-size: 0.9rem; text-align: right; }
+        .info-item .value a { color: var(--accent); text-decoration: none; font-weight: bold; }
+        
+        .styled-config-box { background-color: var(--bg-card); border-radius: 12px; padding: 20px; border-left: 4px solid var(--accent); box-shadow: -5px 0 15px -5px rgba(0, 255, 65, 0.15); margin-bottom: 20px; }
+        .styled-config-box:last-of-type { margin-bottom: 0; }
+        .styled-config-box h3 { font-size: 1.1rem; color: var(--text-bright); font-weight: 600; margin-bottom: 12px; }
+        .styled-config-box .payload-display { font-family: 'JetBrains Mono', monospace; background-color: var(--bg-inset); padding: 12px; border-radius: 8px; font-size: 0.85rem; line-height: 1.6; margin-bottom: 15px; word-break: break-all; }
+        
+        .copy-btn { background-color: var(--accent); color: var(--bg-main); border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+        .copy-btn.copied { background-color: #4CAF50; }
+
+        footer { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid #2a2e32; font-size: 0.9rem; color: var(--text-label); }
+        .footer-btn { background: var(--accent); color: var(--bg-main); padding: 12px 25px; border-radius: 50px; text-decoration: none; font-size: 1rem; font-weight: 600; transition: all 0.3s ease; display: inline-block; margin-top: 15px; }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix-canvas"></canvas>
+
+    <div id="login-overlay">
+        <div class="login-box">
+            <h1><i class="fa-solid fa-lock"></i> Secure Access</h1>
+            <p>Please enter credentials to access the panel.</p>
+            <input type="text" id="username" placeholder="Username" value="Jubair">
+            <input type="password" id="password" placeholder="Password" value="Jubair121">
+            <button id="login-button" class="login-btn">Login</button>
+            <p id="login-error">Invalid credentials. Please try again.</p>
+            <a href="https://t.me/JubairSensi" target="_blank" class="get-access-btn">Need Access? Get It Here</a>
+        </div>
+    </div>
+
+    <!-- YouTube Popup -->
+    <div id="youtube-popup-overlay">
+        <div class="popup-box">
+            <div class="icon"><i class="fa-brands fa-youtube"></i></div>
+            <h2>Subscribe to JubairSensei</h2>
+            <p>Get the latest updates, tutorials, and premium configs by subscribing to our YouTube channel.</p>
+            <a href="https://youtube.com/@jubairsensei?si=qHDDHUhjUM3nNP3h" target="_blank" class="popup-btn subscribe-btn">
+                <i class="fa-solid fa-bell"></i> Subscribe Now
+            </a>
+            <button id="close-popup-btn" class="popup-btn close-btn">Maybe Later</button>
+        </div>
+    </div>
+
+    <div class="main-container" id="main-content">
+        <header class="reveal">
+            <h1>Premium SSH/OVPN Service</h1>
+            <p class="subtitle">by Jubair bro</p>
+        </header>
+
+        <div class="action-button-container reveal">
+            <a href="https://t.me/JubairSensi" target="_blank" class="action-btn"><i class="fa-brands fa-telegram"></i> Join Telegram</a>
+        </div>
+
+        <main>
+            <div id="ssh-content">
+                <div class="grid-container">
+                     <div class="card reveal">
+                        <div class="card-content">
+                            <h2><i class="fa-solid fa-user-shield"></i> Account & Host</h2>
+                            <div class="info-list">
+                                <div class="info-item"><span class="label">Username<</span> <span class="value">telegram</span></div>
+                                <div class="info-item"><span class="label">Password</span> <span class="value">JubairSensei</span></div>
+                                <div class="info-item"><span class="label">Host</span> <span class="value">sg69.bdloser.xyz</span></div>
+                                <div class="info-item"><span class="label">IP Address</span> <span class="value">154.26.138.108</span></div>
+                                <div class="info-item"><span class="label">SlowDNS Host</span> <span class="value">dns-sg69.bdloser.xyz</span></div>
+                                <div class="info-item"><span class="label">Location</span> <span class="value">Singapore</span></div>
+                                <div class="info-item"><span class="label">Expires On</span> <span class="value">Sep 12, 2025</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card reveal">
+                        <div class="card-content">
+                            <h2><i class="fa-solid fa-network-wired"></i> Port Details</h2>
+                            <div class="info-list">
+                                <div class="info-item"><span class="label">OpenSSH</span> <span class="value">443, 80, 22</span></div>
+                                <div class="info-item"><span class="label">Dropbear</span> <span class="value">443, 109</span></div>
+                                <div class="info-item"><span class="label">UdpSSH</span> <span class="value">1-65535</span></div>
+                                <div class="info-item"><span class="label">DNS Port</span> <span class="value">443, 53, 22</span></div>
+                                <div class="info-item"><span class="label">SSL/TLS</span> <span class="value">443</span></div>
+                                <div class="info-item"><span class="label">SSH WS</span> <span class="value">80</span></div>
+                                <div class="info-item"><span class="label">SSH SSL WS</span> <span class="value">443</span></div>
+                                <div class="info-item"><span class="label">OVPN SSL</span> <span class="value">443</span></div>
+                                <div class="info-item"><span class="label">OVPN TCP</span> <span class="value">1194</span></div>
+                                <div class="info-item"><span class="label">OVPN UDP</span> <span class="value">2200</span></div>
+                                <div class="info-item"><span class="label">BadVPN UDP</span> <span class="value">7100, 7300, 7300</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 30px;">
+                    <div class="styled-config-box reveal">
+                        <h3>WSS Payload</h3>
+                        <div id="ssh-payload" class="payload-display">GET / HTTP/1.1[crlf]Host: sg69.bdloser.xyz[crlf]Upgrade: websocket[crlf][crlf]</div>
+                        <button class="copy-btn" onclick="copyToClipboard('ssh-payload', this)"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
+                    </div>
+                    <div class="styled-config-box reveal">
+                        <h3>SlowDNS Public Key</h3>
+                        <div id="ssh-pubkey" class="payload-display">8f2aeaa68a8181a4f5e503b4b244a24b02d2bae3d767e286387821333eb61311</div>
+                        <button class="copy-btn" onclick="copyToClipboard('ssh-pubkey', this)"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
+                    </div>
+                     <div class="card reveal">
+                        <div class="card-content">
+                            <h2><i class="fa-solid fa-download"></i> Downloads</h2>
+                            <div class="info-list">
+                                <div class="info-item"><span class="label">OVPN Files</span><span class="value"><a href="https://sg69.bdloser.xyz:81/allovpn.zip" target="_blank">Download</a></span></div>
+                                <div class="info-item"><span class="label">Save Account</span><span class="value"><a href="https://sg69.bdloser.xyz:81/ssh-telegram.txt" target="_blank">Download .txt</a></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="reveal">
+            <p>Need help or want more premium configs?</p>
+            <a href="https://t.me/Jubair" target="_blank" class="footer-btn">Contact Jubair bro</a>
+        </footer>
+    </div>
+    
+    <script>
+        const loginOverlay = document.getElementById('login-overlay');
+        const mainContent = document.getElementById('main-content');
+        const youtubePopup = document.getElementById('youtube-popup-overlay');
+        
+        document.getElementById('login-button').addEventListener('click', () => {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const errorMsg = document.getElementById('login-error');
+
+            if (user === 'Jubair' && pass === 'Jubair121') {
+                loginOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    loginOverlay.style.display = 'none';
+                    mainContent.classList.add('visible');
+                    initScrollAnimations();
+                    // Show YouTube popup after 4 seconds
+                    setTimeout(() => {
+                        youtubePopup.classList.add('visible');
+                    }, 4000);
+                }, 500);
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        });
+        
+        // Close popup button functionality
+        document.getElementById('close-popup-btn').addEventListener('click', () => {
+            youtubePopup.classList.remove('visible');
+        });
+
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const alphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const rainDrops = Array.from({ length: columns }).map(() => 1);
+
+        const drawMatrix = () => {
+            ctx.fillStyle = 'rgba(16, 20, 24, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+            ctx.font = fontSize + 'px monospace';
+            rainDrops.forEach((y, ind) => {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, ind * fontSize, y * fontSize);
+                if (y * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[ind] = 0;
+                }
+                rainDrops[ind]++;
+            });
+        };
+        const matrixInterval = setInterval(drawMatrix, 33);
+
+        function copyToClipboard(elementId, buttonElement) {
+            const textToCopy = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalHTML = buttonElement.innerHTML;
+                buttonElement.innerHTML = '<i class="fa-solid fa-check"></i> <span>Copied!</span>';
+                buttonElement.classList.add('copied');
+                setTimeout(() => {
+                    buttonElement.innerHTML = originalHTML;
+                    buttonElement.classList.remove('copied');
+                }, 2000);
+            }).catch(err => console.error('Failed to copy: ', err));
+        }
+
+        function initScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+    </script>
+</body>
+</html>
