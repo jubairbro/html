@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Base64 Encoder & Decoder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Hack', 'Courier New', Courier, monospace; /* Hack font, if available, otherwise Courier New */
+            background-color: #000000; /* Pure black background */
+            color: #00ff00; /* Neon green text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: hidden; /* Prevent scrolling for a fixed hacker console look */
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            padding: 25px;
+            background-color: rgba(0, 0, 0, 0.8); /* Slightly transparent black */
+            border: 2px solid;
+            border-radius: 5px; /* Sharper corners */
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.4); /* Glowing green shadow */
+            animation: borderFlicker 4s infinite alternate, changingBorder 6s linear infinite; /* Two animations */
+            position: relative; /* For the border animation */
+        }
+        /* New Flicker animation for the border */
+        @keyframes borderFlicker {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.8); }
+        }
+        /* Existing changingBorder for color cycling */
+        @keyframes changingBorder {
+            0% { border-color: #00ff00; } /* Neon Green */
+            25% { border-color: #00ffff; } /* Cyan */
+            50% { border-color: #ffff00; } /* Yellow */
+            75% { border-color: #ff00ff; } /* Magenta */
+            100% { border-color: #00ff00; }
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #00ff00;
+            padding-bottom: 15px;
+        }
+        .nav-btn {
+            color: #00ff00;
+            text-decoration: none;
+            font-size: 1.2em;
+            margin: 0 15px;
+            padding: 5px 10px;
+            border-radius: 3px; /* Sharper buttons */
+            transition: background-color 0.3s, text-shadow 0.3s, color 0.3s;
+            cursor: pointer;
+            background: none;
+            border: 1px solid #00ff00; /* Green border for buttons */
+            font-family: 'Hack', 'Courier New', Courier, monospace;
+        }
+        .nav-btn:hover {
+            background-color: rgba(0, 255, 0, 0.2); /* Slight green tint on hover */
+            text-shadow: 0 0 8px #00ff00;
+            color: #00ff00;
+        }
+        .nav-btn.active {
+            background-color: #00ff00;
+            color: #000000; /* Black text on active green */
+            font-weight: bold;
+            box-shadow: 0 0 10px #00ff00; /* Active glow */
+        }
+        .title-card {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .title-card h1 {
+            font-size: 2.5em; /* Slightly larger title */
+            text-shadow: 0 0 15px #00ff00; /* Stronger glow */
+            color: #00ff00;
+        }
+        .box-container {
+            margin-top: 20px;
+        }
+        label, h3 {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            color: #00ff00;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+        }
+        textarea, .drop-zone {
+            width: 100%;
+            background-color: #000000; /* Black input/output areas */
+            border: 1px solid #00ff00; /* Green border */
+            border-radius: 3px;
+            color: #00ffff; /* Cyan text inside boxes for contrast */
+            padding: 15px;
+            font-family: 'Hack', 'Courier New', Courier, monospace;
+            font-size: 1em;
+            box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.2); /* Inner glow */
+        }
+        textarea::placeholder { /* Placeholder style */
+            color: rgba(0, 255, 0, 0.5);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 150px; /* Consistent height */
+        }
+        .drop-zone {
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            border-style: dashed; /* Dashed border for drop zone */
+        }
+        .drop-zone:hover {
+            background-color: rgba(0, 255, 0, 0.05); /* Lighter green tint on hover */
+            border-color: #00ffff; /* Cyan border on hover */
+        }
+        .drop-zone img {
+            max-height: 120px;
+            max-width: 100%;
+            border-radius: 3px;
+            border: 1px solid #00ff00;
+            margin-top: 10px;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* Smaller gap */
+        }
+        .btn {
+            background-color: transparent;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+            font-family: 'Hack', 'Courier New', Courier, monospace;
+        }
+        .btn.clear { border-color: #ff0000; color: #ff0000; } /* Red for clear */
+        .btn:hover {
+            background-color: #00ff00;
+            color: #000000;
+            box-shadow: 0 0 10px #00ff00;
+        }
+        .btn.clear:hover {
+            background-color: #ff0000;
+            color: #000000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+        .output-image-container {
+            width: 100%;
+            min-height: 150px;
+            background-color: #000000;
+            border: 1px dashed #00ff00;
+            border-radius: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            text-align: center;
+            box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.2);
+        }
+        .output-image-container img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 3px;
+            border: 1px solid #00ffff; /* Cyan border for output image */
+        }
+        .hidden {
+            display: none;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px dashed #333; /* Dashed separator */
+            color: #888; /* Dimmer text for footer */
+            font-size: 0.9em;
+        }
+        .footer-btn {
+            color: #888;
+            text-decoration: none;
+            margin: 0 8px;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        .footer-btn:hover {
+            color: #00ffff; /* Cyan on hover */
+            text-shadow: 0 0 5px #00ffff;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <button id="encoderTab" class="nav-btn active">ENCODE</button>
+            <button id="decoderTab" class="nav-btn">DECODE</button>
+        </nav>
+
+        <div id="encoderSection">
+            <div class="title-card">
+                <h1>IMAGE TO BASE64</h1>
+            </div>
+            <div class="box-container">
+                <h3>UPLOAD IMAGE (MAX: 500KB)</h3>
+                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                <label for="imageInput" class="drop-zone" id="dropZone">
+                    <span id="previewText">CLICK OR DRAG & DROP IMAGE HERE</span>
+                    <div id="previewImageContainer"></div>
+                </label>
+            </div>
+            <div class="box-container">
+                <h3>BASE64 OUTPUT</h3>
+                <textarea id="base64Output" readonly placeholder="[...ENCODED STRING WILL APPEAR HERE...]"></textarea>
+                <div class="button-container">
+                    <button id="copyButton" class="btn">COPY TO CLIPBOARD</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="decoderSection" class="hidden">
+            <div class="title-card">
+                <h1>BASE64 TO IMAGE</h1>
+            </div>
+            <div class="box-container">
+                <h3>PASTE BASE64 STRING HERE</h3>
+                <textarea id="base64Input" placeholder="[...PASTE YOUR BASE64 STRING HERE...]"></textarea>
+                <div class="button-container">
+                    <button id="decodeButton" class="btn">DECODE</button>
+                    <button id="clearButton" class="btn clear">CLEAR</button>
+                </div>
+            </div>
+            <div class="box-container">
+                <h3>IMAGE OUTPUT</h3>
+                <div class="output-image-container" id="imageOutput">
+                    [...DECODED IMAGE WILL APPEAR HERE...]
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <a href="https://jubairbro.pages.dev" target="_blank" class="footer-btn">MADE BY: JUBAIR BRO</a>
+            <a href="https://t.me/JubairFF" target="_blank" class="footer-btn">TELEGRAM</a>
+        </footer>
+    </div>
+
+    <script>
+        // --- Tab Switching Logic ---
+        const encoderTab = document.getElementById('encoderTab');
+        const decoderTab = document.getElementById('decoderTab');
+        const encoderSection = document.getElementById('encoderSection');
+        const decoderSection = document.getElementById('decoderSection');
+
+        encoderTab.addEventListener('click', () => {
+            encoderTab.classList.add('active');
+            decoderTab.classList.remove('active');
+            encoderSection.classList.remove('hidden');
+            decoderSection.classList.add('hidden');
+        });
+
+        decoderTab.addEventListener('click', () => {
+            decoderTab.classList.add('active');
+            encoderTab.classList.remove('active');
+            decoderSection.classList.remove('hidden');
+            encoderSection.classList.add('hidden');
+        });
+
+        // --- Encoder Logic ---
+        const imageInput = document.getElementById('imageInput');
+        const dropZone = document.getElementById('dropZone');
+        const previewText = document.getElementById('previewText');
+        const previewImageContainer = document.getElementById('previewImageContainer');
+        const base64Output = document.getElementById('base64Output');
+        const copyButton = document.getElementById('copyButton');
+        const MAX_SIZE = 500 * 1024; // 500KB
+
+        const handleFile = (file) => {
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                alert('ERROR: NOT AN IMAGE FILE.');
+                return;
+            }
+            if (file.size > MAX_SIZE) {
+                alert('ERROR: FILE SIZE EXCEEDS 500KB LIMIT.');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                base64Output.value = e.target.result;
+                previewText.style.display = 'none'; // Hide text
+                previewImageContainer.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+            };
+            reader.readAsDataURL(file);
+        };
+
+        imageInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#00ffff'; /* Cyan border on drag over */
+            dropZone.style.boxShadow = '0 0 15px rgba(0, 255, 255, 0.5)';
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#00ff00';
+            dropZone.style.boxShadow = 'inset 0 0 5px rgba(0, 255, 0, 0.2)';
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#00ff00';
+            dropZone.style.boxShadow = 'inset 0 0 5px rgba(0, 255, 0, 0.2)';
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        copyButton.addEventListener('click', () => {
+            if (base64Output.value) {
+                navigator.clipboard.writeText(base64Output.value).then(() => {
+                    copyButton.textContent = 'COPIED!';
+                    setTimeout(() => { copyButton.textContent = 'COPY TO CLIPBOARD'; }, 2000);
+                });
+            }
+        });
+        
+        // --- Decoder Logic ---
+        const base64Input = document.getElementById('base64Input');
+        const decodeButton = document.getElementById('decodeButton');
+        const clearButton = document.getElementById('clearButton');
+        const imageOutput = document.getElementById('imageOutput');
+        const initialOutputText = imageOutput.innerHTML; // Store initial text
+
+        decodeButton.addEventListener('click', () => {
+            let b64String = base64Input.value.trim();
+            if (!b64String) {
+                alert('ERROR: PLEASE PASTE A BASE64 STRING.');
+                return;
+            }
+
+            // Check if it already has the data URI prefix
+            if (!b64String.startsWith('data:image/')) {
+                // If not, assume it's a JPEG (common default) and add the prefix
+                // You could add more robust detection here if needed (e.g., check first few chars)
+                b64String = 'data:image/jpeg;base64,' + b64String;
+            }
+
+            // Create a temporary image to validate if it's a valid Base64 image
+            const img = new Image();
+            img.onload = () => {
+                imageOutput.innerHTML = `<img src="${b64String}" alt="Decoded Image">`;
+            };
+            img.onerror = () => {
+                alert('ERROR: INVALID BASE64 IMAGE STRING OR UNSUPPORTED FORMAT.');
+                imageOutput.innerHTML = '[...DECODED IMAGE WILL APPEAR HERE...]';
+            };
+            img.src = b64String;
+        });
+
+        clearButton.addEventListener('click', () => {
+            base64Input.value = '';
+            imageOutput.innerHTML = initialOutputText;
+        });
+    </script>
+</body>
+</html>
