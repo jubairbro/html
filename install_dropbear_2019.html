@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide: Install Dropbear v2019.78 on Modern Debian/Ubuntu</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --container-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --heading-color: #58a6ff;
+            --subtle-text: #8b949e;
+            --code-bg: #010409;
+            --btn-bg: #21262d;
+            --btn-hover-bg: #30363d;
+            --success-color: #2ea043;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            line-height: 1.7;
+            margin: 0;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background-color: var(--container-bg);
+            padding: 2rem 2.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        h1, h2, h3 {
+            color: var(--heading-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            text-align: center;
+            border-bottom: none;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            margin-top: 3rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin-top: 2.5rem;
+            border-bottom: none;
+            font-weight: 500;
+        }
+
+        p, li {
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+
+        .intro-box {
+            background-color: rgba(88, 166, 255, 0.1);
+            border-left: 4px solid var(--heading-color);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 5px;
+        }
+
+        .code-block-wrapper {
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            padding: 1.25rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre;
+            border: 1px solid var(--border-color);
+            font-size: 0.9em;
+        }
+
+        code {
+            font-family: var(--font-mono);
+            color: var(--text-color);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--btn-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-family: var(--font-main);
+            font-size: 0.85em;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            opacity: 0.7;
+        }
+        
+        .code-block-wrapper:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--btn-hover-bg);
+        }
+        
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .copy-btn.copied {
+            background-color: var(--success-color);
+            border-color: #347d3f;
+            color: white;
+        }
+
+        strong, b {
+            color: var(--heading-color);
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-button {
+            display: inline-block;
+            background-color: var(--btn-bg);
+            color: var(--text-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .footer-button:hover {
+            background-color: var(--btn-hover-bg);
+            transform: translateY(-2px);
+        }
+
+    </style>
+</head>
+<body>
+    <main class="container">
+        <header>
+            <h1>Guide: Compile & Install Dropbear v2019.78 on Modern Debian/Ubuntu</h1>
+        </header>
+
+        <section class="intro-box">
+            <p><strong>Objective:</strong> This guide details how to compile and install the legacy Dropbear v2019.78 on modern Linux systems. The primary goal is to enable older cryptographic algorithms (like DSS keys and SHA1-based ciphers) required for compatibility with legacy hardware or clients.</p>
+            <p><strong>The Core Problem:</strong> Modern compilers (GCC 10+) will fail to build this old source code, resulting in linker errors. We solve this by installing and explicitly using the older <strong>GCC 9 compiler</strong> for the build process.</p>
+        </section>
+
+        <h2>Step-by-Step Installation</h2>
+
+        <h3>Step 1: Install Dependencies and GCC-9 Compiler</h3>
+        <p>First, update your package list. Then, install the essential build tools, required libraries, and the specific older compiler we need for this task.</p>
+        <div class="code-block-wrapper">
+            <pre><code>sudo apt update
+sudo apt install -y build-essential zlib1g-dev libtomcrypt-dev libtommath-dev pkg-config gcc-9 g++-9</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+
+        <h3>Step 2: Remove Any Existing Dropbear Version</h3>
+        <p>To prevent conflicts, completely stop and purge any version of Dropbear that was installed via APT.</p>
+        <div class="code-block-wrapper">
+            <pre><code>sudo systemctl stop dropbear
+sudo apt-get remove --purge dropbear -y
+sudo rm -rf /etc/dropbear</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+
+        <h3>Step 3: Download and Extract Source Code</h3>
+        <p>Navigate to a source directory, download the specific v2019.78 tarball, and extract it.</p>
+        <div class="code-block-wrapper">
+            <pre><code>cd /usr/local/src
+sudo wget https://matt.ucc.asn.au/dropbear/releases/dropbear-2019.78.tar.bz2
+sudo tar -xjf dropbear-2019.78.tar.bz2
+cd dropbear-2019.78</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+
+        <h3>Step 4: Customize Features via <code>localoptions.h</code></h3>
+        <p>You must create a <code>localoptions.h</code> file to enable the specific legacy features you need. This file overrides the default build options.</p>
+        <div class="code-block-wrapper">
+            <pre><code>sudo nano localoptions.h</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+        <p>Paste the entire code block below into the editor. This configuration enables legacy algorithms like DSS, 3DES, and SHA1 KEX.</p>
+        <div class="code-block-wrapper">
+            <pre><code>#define DROPBEAR_DSS 1
+#define DROPBEAR_RSA 1
+#define DROPBEAR_ECDSA 0
+
+#define DROPBEAR_AES128 1
+#define DROPBEAR_AES256 1
+#define DROPBEAR_3DES 1
+#define DROPBEAR_BLOWFISH 0
+
+#define DROPBEAR_SHA1_HMAC 1
+#define DROPBEAR_SHA2_256_HMAC 1
+
+#define DROPBEAR_DH_GROUP14_SHA1 1
+#define DROPBEAR_DH_GROUP14_SHA256 0
+#define DROPBEAR_DH_GROUP14 1
+
+#define DROPBEAR_PASSWORD_AUTH 1
+#define DROPBEAR_CLI_PASSWORD_AUTH 1</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+        <p>Save the file and exit by pressing <strong>Ctrl+O</strong>, <strong>Enter</strong>, and <strong>Ctrl+X</strong>.</p>
+
+        <h3>Step 5: Configure the Build Using <code>gcc-9</code></h3>
+        <p>This is the most critical step. We explicitly tell the <code>configure</code> script to use the <code>gcc-9</code> compiler we installed earlier. This prevents compilation errors.</p>
+        <div class="code-block-wrapper">
+            <pre><code>sudo CC=gcc-9 CXX=g++-9 ./configure</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+
+        <h3>Step 6: Compile and Install Dropbear</h3>
+        <p>Now that the build is correctly configured, compile the source code into a multi-purpose binary and install it to your system.</p>
+        <div class="code-block-wrapper">
+            <pre><code>sudo make clean
+sudo make PROGRAMS="dropbear dbclient dropbearkey scp" MULTI=1
+sudo make install</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+
+        <h3>Step 7: Generate New Host Keys</h3>
+        <p>Dropbear requires host keys to function. Create the directory and generate the necessary RSA and DSS keys. We then set secure permissions for them.</p>
+        <div class="code-block-wrapper">
+            <pre><code>sudo mkdir -p /etc/dropbear
+sudo /usr/local/bin/dropbearkey -t rsa -f /etc/dropbear/dropbear_rsa_host_key
+sudo /usr/local/bin/dropbearkey -t dss -f /etc/dropbear/dropbear_dss_host_key
+sudo chmod 600 /etc/dropbear/dropbear_*_host_key</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+        
+        <h3>Step 8: Create a <code>systemd</code> Service File</h3>
+        <p>To manage Dropbear and ensure it starts on boot, create a custom <code>systemd</code> service file.</p>
+        <div class="code-block-wrapper">
+            <pre><code>sudo nano /etc/systemd/system/dropbear.service</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+        <p>Paste the following configuration into the file. The <code>ExecStart</code> line points to the newly compiled binary. You can change the port (<code>-p</code>) and banner (<code>-b</code>) to fit your needs.</p>
+        <div class="code-block-wrapper">
+            <pre><code>[Unit]
+Description=Lightweight SSH server
+After=network.target
+
+[Service]
+ExecStart=/usr/local/sbin/dropbear -F -E -p 143 -b /etc/banner.txt
+Restart=on-failure
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+        <p>Save and exit the editor.</p>
+
+        <h3>Step 9: Reload, Enable, and Start the Service</h3>
+        <p>Finally, apply the new service configuration and start the Dropbear service.</p>
+        <div class="code-block-wrapper">
+            <pre><code>sudo systemctl daemon-reload
+sudo systemctl enable dropbear.service
+sudo systemctl start dropbear.service</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+
+        <h2>Verification</h2>
+        <p>Check the status to ensure the service is running correctly.</p>
+        <div class="code-block-wrapper">
+            <pre><code>sudo systemctl status dropbear.service</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+        <p>You should see a green <strong>active (running)</strong> status. You can also verify the installed version with the following command:</p>
+        <div class="code-block-wrapper">
+            <pre><code>/usr/local/sbin/dropbear -V</code></pre>
+            <button class="copy-btn">Copy</button>
+        </div>
+        <p>The output should be <strong><code>Dropbear v2019.78</code></strong>. Congratulations, your setup is complete! 🎉</p>
+
+        <footer>
+             <a href="https://jubairbro.pages.dev" target="_blank" rel="noopener noreferrer" class="footer-button">© Jubair bro</a>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const copyButtons = document.querySelectorAll('.copy-btn');
+            copyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const pre = button.previousElementSibling;
+                    const code = pre.querySelector('code');
+                    const textToCopy = code.innerText;
+
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        button.textContent = 'Copied!';
+                        button.classList.add('copied');
+                        setTimeout(() => {
+                            button.textContent = 'Copy';
+                            button.classList.remove('copied');
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
