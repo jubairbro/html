@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Encoder & Decoder</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --primary-color: #2c2c2c;
+            --secondary-color: #444;
+            --accent-color: #00e676;
+            --text-color: #f0f0f0;
+            --border-color: #555;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--primary-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .tab-nav {
+            display: flex;
+            background-color: #222;
+        }
+
+        .tab-button {
+            flex-grow: 1;
+            padding: 15px;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            color: var(--text-color);
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button.active {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+        }
+
+        .tab-button:hover:not(.active) {
+            background-color: var(--secondary-color);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 25px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+        
+        .zoom-block {
+            padding: 20px;
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            margin-top: 0;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        textarea, select {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-size: 16px;
+            resize: vertical;
+            box-sizing: border-box; /* Important for padding */
+        }
+        
+        textarea {
+            min-height: 120px;
+        }
+        
+        .output-container {
+            position: relative;
+        }
+        
+        #output-encoder, #output-decoder {
+            background-color: #252525;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent-color);
+            color: #111;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: #00c853;
+        }
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="tab-nav">
+            <button class="tab-button active" onclick="showTab('encoder')">Encoder</button>
+            <button class="tab-button" onclick="showTab('decoder')">Decoder</button>
+        </div>
+
+        <div id="encoder" class="tab-content active">
+            <h2>Text Encoder</h2>
+            <div class="zoom-block">
+                <div class="form-group">
+                    <label for="input-encoder">Enter Text to Encode:</label>
+                    <textarea id="input-encoder" placeholder="Type or paste your text here..." oninput="handleEncode()"></textarea>
+                </div>
+                <div class="form-group">
+                     <label for="type-encoder">Select Encoding Type:</label>
+                    <select id="type-encoder" onchange="handleEncode()">
+                        <option value="base64">Base64</option>
+                        <option value="binary">Binary</option>
+                        <option value="ascii">ASCII</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="output-encoder">Encoded Output:</label>
+                    <div class="output-container">
+                        <textarea id="output-encoder" readonly placeholder="Encoded result will appear here..."></textarea>
+                        <button class="copy-btn" onclick="copyToClipboard('output-encoder')">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="decoder" class="tab-content">
+            <h2>Text Decoder</h2>
+            <div class="zoom-block">
+                 <div class="form-group">
+                    <label for="input-decoder">Enter Code to Decode:</label>
+                    <textarea id="input-decoder" placeholder="Paste your code here..." oninput="handleDecode()"></textarea>
+                </div>
+                 <div class="form-group">
+                     <label for="type-decoder">Select Decoding Type:</label>
+                    <select id="type-decoder" onchange="handleDecode()">
+                        <option value="base64">Base64</option>
+                        <option value="binary">Binary</option>
+                        <option value="ascii">ASCII</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="output-decoder">Decoded Output:</label>
+                    <div class="output-container">
+                        <textarea id="output-decoder" readonly placeholder="Decoded result will appear here..."></textarea>
+                        <button class="copy-btn" onclick="copyToClipboard('output-decoder')">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching logic
+        function showTab(tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- ENCODING LOGIC ---
+        function handleEncode() {
+            const input = document.getElementById('input-encoder').value;
+            const type = document.getElementById('type-encoder').value;
+            const outputEl = document.getElementById('output-encoder');
+            
+            if (!input) {
+                outputEl.value = '';
+                return;
+            }
+
+            try {
+                let result = '';
+                if (type === 'base64') {
+                    result = btoa(unescape(encodeURIComponent(input))); // Handle UTF-8 characters
+                } else if (type === 'binary') {
+                    result = input.split('').map(char => char.charCodeAt(0).toString(2).padStart(8, '0')).join(' ');
+                } else if (type === 'ascii') {
+                    result = input.split('').map(char => char.charCodeAt(0)).join(' ');
+                }
+                outputEl.value = result;
+            } catch (error) {
+                outputEl.value = 'Error: Invalid input for selected encoding.';
+            }
+        }
+
+        // --- DECODING LOGIC ---
+        function handleDecode() {
+            const input = document.getElementById('input-decoder').value;
+            const type = document.getElementById('type-decoder').value;
+            const outputEl = document.getElementById('output-decoder');
+
+            if (!input) {
+                outputEl.value = '';
+                return;
+            }
+            
+            try {
+                let result = '';
+                if (type === 'base64') {
+                    result = decodeURIComponent(escape(atob(input))); // Handle UTF-8 characters
+                } else if (type === 'binary') {
+                    result = input.split(' ').map(bin => String.fromCharCode(parseInt(bin, 2))).join('');
+                } else if (type === 'ascii') {
+                    result = input.split(' ').map(num => String.fromCharCode(parseInt(num))).join('');
+                }
+                outputEl.value = result;
+            } catch (error) {
+                outputEl.value = 'Error: Invalid code for selected decoding type.';
+            }
+        }
+
+        // --- COPY BUTTON LOGIC ---
+        function copyToClipboard(elementId) {
+            const textarea = document.getElementById(elementId);
+            textarea.select();
+            document.execCommand('copy');
+            // Optional: Add a "Copied!" feedback
+            const originalButtonText = event.target.textContent;
+            event.target.textContent = 'Copied!';
+            setTimeout(() => {
+                event.target.textContent = originalButtonText;
+            }, 1500);
+        }
+        
+        // Initial call to set default view if there's any pre-filled text (not common)
+        handleEncode();
+        handleDecode();
+    </script>
+
+</body>
+</html>
