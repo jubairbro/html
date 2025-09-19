@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MITMproxy Setup Guide - Green Theme</title>
+    <style>
+        :root {
+            --bg-primary: #0a1f15;
+            --bg-secondary: #132a21;
+            --text-primary: #d1f0e3;
+            --text-secondary: #9ec6b6;
+            --accent: #2ecc71;
+            --border: #2d4a3e;
+            --code-bg: #132a21;
+            --success: #27ae60;
+            --button-bg: #27ae60;
+            --button-hover: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1, h2, h3 {
+            color: var(--accent);
+            margin: 24px 0 16px 0;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+        
+        h1 {
+            font-size: 2em;
+            margin-top: 0;
+        }
+        
+        p {
+            margin-bottom: 16px;
+        }
+        
+        .section {
+            background-color: var(--bg-secondary);
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+        }
+        
+        .code-block {
+            background-color: var(--code-bg);
+            border-radius: 6px;
+            padding: 16px;
+            margin: 16px 0;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        
+        code {
+            font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
+            color: var(--text-primary);
+            background-color: var(--code-bg);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        
+        .copy-btn:hover {
+            opacity: 1;
+        }
+        
+        .note {
+            background-color: rgba(46, 204, 113, 0.15);
+            border-left: 4px solid var(--accent);
+            padding: 12px 16px;
+            margin: 16px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .success {
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            text-align: center;
+            margin-right: 8px;
+            font-size: 14px;
+            line-height: 24px;
+        }
+        
+        .info-bangla {
+            background-color: rgba(39, 174, 96, 0.15);
+            border-left: 4px solid var(--success);
+            padding: 12px 16px;
+            margin: 16px 0;
+            border-radius: 0 4px 4px 0;
+            font-style: italic;
+        }
+        
+        .link-item {
+            background-color: var(--bg-secondary);
+            border-radius: 6px;
+            padding: 16px;
+            margin: 24px 0;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        
+        .button {
+            display: inline-block;
+            background-color: var(--button-bg);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .button:hover {
+            background-color: var(--button-hover);
+        }
+    </style>
+</head>
+<body>
+    <h1>MITMproxy Setup Guide</h1>
+    <p>This guide will help you set up MITMproxy to intercept and modify HTTP traffic, specifically to inject custom content into responses from a target URL.</p>
+    
+    <div class="info-bangla">
+        <strong>বাংলা নির্দেশনা:</strong> এই গাইডটি আপনাকে MITMproxy সেট আপ করতে সাহায্য করবে, যা HTTP ট্রাফিক ইন্টারসেপ্ট এবং মডিফাই করতে ব্যবহৃত হয়। বিশেষভাবে, টার্গেট URL থেকে আসা রেসপন্সে কাস্টম কন্টেন্ট ইনজেক্ট করার জন্য এটি ব্যবহার করা যাবে।
+    </div>
+    
+    <div class="section">
+        <h2><span class="step-number">1</span>Track curl/wget Requests</h2>
+        <p>Use this command to monitor for curl or wget requests in a script:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>strace -s 4096 -f -e execve ./chapeey.sh 2>&1 | grep -E "curl|wget"</code></pre>
+        </div>
+        <div class="info-bangla">
+            স্ক্রিপ্টে curl বা wget রিকোয়েস্ট মনিটর করতে এই কমান্ডটি ব্যবহার করুন। এটি আপনাকে দেখাবে স্ক্রিপ্টটি কোন URLs থেকে ডেটা ডাউনলোড করছে।
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="step-number">2</span>Install MITMproxy</h2>
+        <p>Install mitmproxy on your server using the following commands:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>sudo apt update
+sudo apt install -y mitmproxy</code></pre>
+        </div>
+        <div class="info-bangla">
+            MITMproxy ইনস্টল করতে উপরের কমান্ডগুলো ব্যবহার করুন। প্রথমে প্যাকেজ লিস্ট আপডেট করুন, তারপর mitmproxy ইনস্টল করুন।
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="step-number">3</span>Create Python Script for Response Modification</h2>
+        <p>Create a Python script that will intercept responses and add your custom text:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>#!/usr/bin/env python3
+# Code from Jubair bro
+from mitmproxy import http
+
+TARGET_URL = "https://raw.githubusercontent.com/Amchapeey/strategic/refs/heads/main/keygen"
+CUSTOM_LINE = "### Jubair-bro 2027-05-14 94.237.66.145"
+
+def response(flow: http.HTTPFlow):
+    if flow.request.pretty_url == TARGET_URL:
+        content = flow.response.content.decode()
+        if CUSTOM_LINE not in content:
+            content += f"\n{CUSTOM_LINE}"
+            flow.response.text = content</code></pre>
+        </div>
+        <p class="note">Save this script as <code>/root/bypass.py</code></p>
+        <div class="info-bangla">
+            এই পাইথন স্ক্রিপ্টটি টার্গেট URL থেকে আসা রেসপন্সে আপনার কাস্টম টেক্সট যোগ করবে। স্ক্রিপ্টটি /root/bypass.py পাথে সেভ করুন।
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="step-number">4</span>Make Script Executable</h2>
+        <p>Give execute permission to your Python script:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>sudo chmod +x /root/bypass.py</code></pre>
+        </div>
+        <div class="info-bangla">
+            স্ক্রিপ্টটি executable করার অনুমতি দিন, যাতে এটি রান করা যায়।
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="step-number">5</span>Create Systemd Service</h2>
+        <p>Create a systemd service to run mitmdump automatically in the background:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>sudo nano /etc/systemd/system/bypass.service</code></pre>
+        </div>
+        <p>Add the following content to the service file:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>[Unit]
+Description=mitmdump url redirect service on port 8890
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/mitmdump -s /root/bypass.py -p 8890
+Restart=always
+User=root
+Environment=HTTP_PROXY=http://127.0.0.1:8890
+Environment=HTTPS_PROXY=http://127.0.0.1:8890
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+        </div>
+        <p class="note">Note: The service file should be named <code>bypass.service</code> as shown in the original instructions.</p>
+        <div class="info-bangla">
+            Systemd সার্ভিস তৈরি করুন যাতে mitmdump স্বয়ংক্রিয়ভাবে ব্যাকগ্রাউন্ডে চলতে থাকে। ফাইলটির নাম bypass.service রাখুন।
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="step-number">6</span>Enable and Start the Service</h2>
+        <p>Enable and start your mitmdump service with these commands:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>sudo systemctl daemon-reload
+sudo systemctl enable --now bypass.service
+sudo systemctl start bypass.service
+sudo systemctl status bypass.service</code></pre>
+        </div>
+        <div class="info-bangla">
+            সার্ভিসটি enable এবং start করুন। শেষ কমান্ডটি সার্ভিসের status চেক করবে - নিশ্চিত হোন যে এটি সক্রিয় এবং কোনো error দেখাচ্ছে না।
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="step-number">7</span>Set Terminal Proxy</h2>
+        <p>Configure your terminal to use the proxy (note the correct port is 8890, </p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>export http_proxy=http://127.0.0.1:8890
+export https_proxy=http://127.0.0.1:8890</code></pre>
+        </div>
+        <p class="note">Note: The port 8890.</p>
+        <div class="info-bangla">
+            টার্মিনালকে proxy ব্যবহার করার জন্য কনফিগার করুন। মনোযোগ দিন: port 8890 ব্যবহার করুন।
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="step-number">8</span>Test the Setup</h2>
+        <p>Verify that your custom text injection is working:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>curl -s https://raw.githubusercontent.com/Amchapeey/strategic/refs/heads/main/keygen</code></pre>
+        </div>
+        <div class="info-bangla">
+            সেটআপটি কাজ করছে কিনা তা verify করুন। এই curl কমান্ডটি রান করলে আপনার যোগ করা কাস্টম লাইনটি আউটপুটে দেখাতে হবে।
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2><span class="step-number">9</span>Fix SSL Certificate Issues</h2>
+        <p>If you encounter SSL problems, install the mitmproxy CA certificate:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code>mkdir -p ~/.mitmproxy
+mitmproxy --quit
+ls ~/.mitmproxy/
+sudo cp ~/.mitmproxy/mitmproxy-ca-cert.pem /usr/local/share/ca-certificates/mitmproxy-ca.crt
+sudo update-ca-certificates</code></pre>
+        </div>
+        <p class="success">Now done ✅✅✅✅✅✅</p>
+        <div class="info-bangla">
+            যদি SSL certificate-related সমস্যা দেখা দেয়, তাহলে mitmproxy-এর CA certificate ইন্সটল করুন। এটি HTTPS ট্রাফিক intercept করতে সাহায্য করবে।
+        </div>
+    </div>
+
+    <div class="section">
+        <h2><span class="step-number">10</span>Additional Notes</h2>
+        <div class="info-bangla">
+            <strong>গুরুত্বপূর্ণ নোট:</strong><br>
+            1. এই সেটআপটি শুধুমাত্র educational purpose-এর জন্য<br>
+            2. কোনো live সিস্টেমে ব্যবহার করার আগে সম্পূর্ণ টেস্ট করুন<br>
+            3. কিছু applications নিজস্ব certificate store ব্যবহার করতে পারে, সেগুলোর জন্য আলাদা করে certificate import করতে হতে পারে<br>
+            4. যদি কোনো সমস্যা হয়, mitmproxy এর log চেক করুন: <code>journalctl -u bypass.service -f</code>
+        </div>
+    </div>
+
+    <div class="link-item">
+        <p><strong>Telegram:</strong> Join Our telegram to more tricks✴️.</p>
+        <a href="https://t.me/JubairFF" class="button">Join Telegram</a>
+    </div>
+
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.parentElement;
+            const code = codeBlock.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                button.innerText = 'Copied!';
+                setTimeout(() => {
+                    button.innerText = 'Copy';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
