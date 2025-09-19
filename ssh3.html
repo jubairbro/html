@@ -3,39 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Services by Jubair</title>
-    
-    <!-- Animate.css for animations -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-
+    <title>Account Expired - Premium Services by Jubair</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        @property --angle {
-          syntax: '<angle>';
-          initial-value: 0deg;
-          inherits: false;
-        }
-
         :root {
             --bg-main: #101418;
             --bg-card: #181c20;
-            --bg-inset: #0c0f12;
             --text-main: #c0caf5;
             --text-bright: #ffffff;
             --text-label: #a9b1d6;
             --accent: #00ff41; /* Hacker Green */
             --accent-hover: #00e031;
-            --green-success: #9ece6a;
-            --border-glow: #00ff41;
-            --youtube-red: #ff0000;
-            --youtube-red-hover: #cc0000;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,7 +30,9 @@
             font-family: 'Poppins', sans-serif;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
         
         #matrix-canvas {
@@ -58,391 +44,251 @@
             z-index: -1;
         }
 
-        /* Subscribe Popup Styles */
-        #subscribe-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(16, 20, 24, 0.95);
-            backdrop-filter: blur(8px);
-            z-index: 3000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
-            visibility: visible;
-            opacity: 1;
-        }
-        #subscribe-overlay.hidden {
-            visibility: hidden;
-            opacity: 0;
-        }
-        .popup-box {
-            background-color: var(--bg-card);
-            padding: 40px;
-            border-radius: 16px;
-            text-align: center;
-            width: 90%;
-            max-width: 450px;
-            border: 1px solid #333;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
-            position: relative;
-        }
-        .popup-box h1 { font-size: 1.8rem; color: var(--text-bright); margin-bottom: 10px; }
-        .popup-box p { color: var(--text-label); margin-bottom: 25px; line-height: 1.6; }
-        
-        .unlock-btn {
-            background: var(--youtube-red);
-            color: white;
-            padding: 14px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            border: none;
-        }
-        .unlock-btn:hover {
-            background-color: var(--youtube-red-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.3);
-        }
-        .unlock-btn:disabled {
-            background-color: #555;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        /* Main Content */
         .main-container {
             width: 100%;
             max-width: 1100px;
-            margin: 0 auto;
             padding: 40px 15px;
-            opacity: 0;
-            transition: opacity 0.7s ease-in;
-            pointer-events: none;
-            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-        .main-container.visible { opacity: 1; pointer-events: auto; }
-
-        header { text-align: center; margin-bottom: 30px; }
-        header h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text-bright); margin-bottom: 8px; }
-        header .subtitle { font-size: clamp(0.9rem, 2.5vw, 1.1rem); color: var(--accent); }
         
-        .action-button-container {
+        /* Expired Box Styling with Rainbow Effect */
+        .expired-box {
+            background-color: var(--bg-card);
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 550px;
+            /* --- New styles for square shape and content alignment --- */
+            aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            margin-bottom: 30px;
+            /* ----------------------------------------------------------- */
+            border: 2px solid;
+            transform: scale(0.9);
+            opacity: 0;
+            animation: 
+                fadeInZoom 0.8s forwards ease-out,
+                rainbow-glow 8s linear infinite;
         }
-        .action-btn {
-            background: var(--accent);
+
+        @keyframes fadeInZoom {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes rainbow-glow {
+            0%, 100% { border-color: hsl(0, 100%, 60%); box-shadow: 0 0 25px hsl(0, 100%, 60%, 0.5); }
+            25% { border-color: hsl(90, 100%, 50%); box-shadow: 0 0 30px hsl(90, 100%, 50%, 0.6); }
+            50% { border-color: hsl(180, 100%, 50%); box-shadow: 0 0 25px hsl(180, 100%, 50%, 0.5); }
+            75% { border-color: hsl(270, 100%, 60%); box-shadow: 0 0 30px hsl(270, 100%, 60%, 0.6); }
+        }
+
+        /* --- Styles for staggered content animation --- */
+        .expired-box .icon,
+        .expired-box p,
+        .expired-box .telegram-btn {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        /* Class to trigger the animation */
+        .visible {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        /* ------------------------------------------ */
+
+        .expired-box .icon {
+            font-size: clamp(3rem, 10vw, 4rem);
+            margin-bottom: 20px;
+            animation: bounce 2.5s infinite, rainbow-text 8s linear infinite;
+            transition-delay: 0.5s;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        .expired-box h1 {
+            font-size: clamp(2rem, 8vw, 2.8rem);
+            color: var(--text-bright);
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace; /* Monospaced font for typing effect */
+            min-height: 1.2em; /* Prevents layout shift during typing */
+        }
+        
+        .expired-box h1.animated {
+             animation: rainbow-text 8s linear infinite;
+        }
+        
+        @keyframes rainbow-text {
+            0%, 100% { color: hsl(0, 100%, 65%); }
+            25% { color: hsl(90, 100%, 55%); }
+            50% { color: hsl(180, 100%, 55%); }
+            75% { color: hsl(270, 100%, 65%); }
+        }
+
+        .expired-box p {
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            color: var(--text-label);
+            margin-bottom: 35px;
+            max-width: 400px;
+            transition-delay: 0.7s;
+        }
+        
+        .telegram-btn {
+            background: linear-gradient(45deg, var(--accent), var(--accent-hover));
             color: var(--bg-main);
-            padding: 12px 25px;
+            padding: 15px 32px;
             border-radius: 50px;
             text-decoration: none;
             font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-weight: 700;
+            transition: all 0.4s ease;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            box-shadow: 0 5px 20px rgba(0, 255, 65, 0.25);
+            border: none;
+            transition-delay: 0.9s;
         }
-        .action-btn:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.2);
-        }
-        
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
-        .card { border-radius: 14px; padding: 2px; background: conic-gradient(from var(--angle), var(--bg-card), var(--border-glow) 10%, var(--bg-card) 20%); animation: rotate-border 4s linear infinite; }
-        @keyframes rotate-border { to { --angle: 360deg; } }
-        
-        .card-content { background-color: var(--bg-card); border-radius: 12px; padding: 25px; height: 100%; display: flex; flex-direction: column; }
-        .card h2 { font-size: 1.3rem; color: var(--accent); margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #2a2e32; display: flex; align-items: center; gap: 10px; }
-        
-        .info-list { display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
-        .info-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 5px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); gap: 15px; }
-        .info-item:last-child { border-bottom: none; }
-        .info-item .label { color: var(--text-label); font-weight: 600; font-size: 0.85rem; flex-shrink: 0; }
-        .info-item .value { color: var(--text-bright); font-family: 'JetBrains Mono', monospace; word-break: break-all; font-size: 0.9rem; text-align: right; }
-        .info-item .value a { color: var(--accent); text-decoration: none; font-weight: bold; }
-        .info-item .value a:hover { text-decoration: underline; }
 
-        .styled-config-box { 
-            background-color: var(--bg-card); 
-            border-radius: 12px; 
-            padding: 20px; 
-            border-left: 4px solid var(--accent); 
-            box-shadow: -5px 0 15px -5px rgba(0, 255, 65, 0.15); 
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+        .telegram-btn:hover {
+            transform: translateY(-5px) scale(1.05) !important; /* Added !important to override .visible */
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.4);
         }
-        .styled-config-box h3 { font-size: 1.1rem; color: var(--text-bright); font-weight: 600; margin-bottom: 12px; }
-        .styled-config-box .payload-display { 
-            font-family: 'JetBrains Mono', monospace; 
-            background-color: var(--bg-inset); 
-            padding: 12px; 
-            border-radius: 8px; 
-            font-size: 0.85rem; 
-            line-height: 1.6; 
-            margin-bottom: 15px; 
-            word-break: break-all; 
-            flex-grow: 1;
-            text-align: left;
+
+        .telegram-btn .fa-telegram {
+            font-size: 1.4rem;
         }
         
-        .copy-btn { 
-            background-color: var(--accent); 
-            color: var(--bg-main); 
-            border: none; 
-            padding: 8px 15px; 
-            border-radius: 8px; 
-            cursor: pointer; 
+        footer { 
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center; 
+            padding-top: 20px; 
             font-size: 0.9rem; 
-            font-weight: 600; 
-            transition: all 0.3s ease; 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 8px; 
-            align-self: flex-start;
+            color: var(--text-label); 
         }
-        .copy-btn.copied { background-color: var(--green-success); }
-        .copy-btn:hover { background-color: var(--accent-hover); transform: translateY(-1px); }
 
-        footer { text-align: center; margin-top: 50px; padding: 20px 0; border-top: 1px solid #2a2e32; font-size: 0.9rem; color: var(--text-label); flex-shrink: 0; }
-        .footer-btn { 
-            background: var(--accent); 
-            color: var(--bg-main); 
-            padding: 12px 25px; 
-            border-radius: 50px; 
-            text-decoration: none; 
-            font-size: 1rem; 
-            font-weight: 600; 
-            transition: all 0.3s ease; 
-            display: inline-block; 
-            margin-top: 15px; 
+        /* --- Style for the new link in the footer --- */
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
-        .footer-btn:hover { background-color: var(--accent-hover); transform: translateY(-2px); }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .popup-box { padding: 30px 20px; }
-            .popup-box h1 { font-size: 1.5rem; }
-            .main-container { padding: 30px 10px; }
-            .grid-container { grid-template-columns: 1fr; gap: 20px; }
-            .card-content { padding: 20px; }
-            .card h2 { font-size: 1.2rem; }
-            .info-item { flex-direction: column; align-items: flex-start; }
-            .info-item .value { text-align: left; margin-top: 5px; }
+        footer a:hover {
+            color: var(--text-bright);
+            text-shadow: 0 0 8px var(--accent);
         }
+        /* --------------------------------------------- */
     </style>
 </head>
 <body>
 
     <canvas id="matrix-canvas"></canvas>
 
-    <div id="subscribe-overlay">
-        <div class="popup-box animate__animated animate__tada">
-            <h1><i class="fa-solid fa-unlock-keyhole"></i> Unlock Premium</h1>
-            <p>Do You need the premium Server?  please subscribe to our YouTube channel first.</p>
-            <a href="https://youtube.com/@jubairsensei?si=nrucNOzWsjy0YyY4" target="_blank" class="unlock-btn" id="unlock-button">
-                <i class="fa-brands fa-youtube"></i>
-                <span id="unlock-btn-text">Subscribe to Unlock</span>
+    <div class="main-container" id="main-content">
+        
+        <div class="expired-box">
+            <div class="icon" id="content-icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h1 id="title-text"></h1>
+            <p id="content-p">This premium access has ended. Join our Telegram channel to get a new account and stay updated.</p>
+            <a href="https://t.me/+1p9RnexGMP0yOGVl" target="_blank" class="telegram-btn" id="content-btn">
+                <i class="fa-brands fa-telegram"></i>
+                <span>Join Telegram</span>
             </a>
         </div>
     </div>
     
-    <div class="main-container" id="main-content">
-        <header class="animate__animated">
-            <h1>Premium SSH/OVPN Service</h1>
-            <p class="subtitle">by Jubair bro</p>
-        </header>
-
-        <div class="action-button-container animate__animated">
-            <a href="https://t.me/JubairSensi" target="_blank" class="action-btn"><i class="fa-brands fa-telegram"></i> Join Telegram</a>
-        </div>
-
-        <main>
-            <div id="ssh-content">
-                <div class="grid-container">
-                     <div class="card animate__animated">
-                        <div class="card-content">
-                            <h2><i class="fa-solid fa-user-shield"></i> Account & Host</h2>
-                            <div class="info-list">
-                                <div class="info-item"><span class="label">Username</span> <span class="value">Jubair</span></div>
-                                <div class="info-item"><span class="label">Password</span> <span class="value">FF</span></div>
-                                <div class="info-item"><span class="label">Host</span> <span class="value">sg69.bdloser.xyz</span></div>
-                                <div class="info-item"><span class="label">IP Address</span> <span class="value">154.26.138.108</span></div>
-                                <div class="info-item"><span class="label">SlowDNS Host</span> <span class="value">dns-sg69.bdloser.xyz</span></div>
-                                <div class="info-item"><span class="label">Location</span> <span class="value">Singapore</span></div>
-                                <div class="info-item"><span class="label">Expires On</span> <span class="value">Sep 16, 2025</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card animate__animated">
-                        <div class="card-content">
-                            <h2><i class="fa-solid fa-network-wired"></i> Port Details</h2>
-                            <div class="info-list">
-                                <div class="info-item"><span class="label">OpenSSH</span> <span class="value">443, 80, 22</span></div>
-                                <div class="info-item"><span class="label">Dropbear</span> <span class="value">443, 109</span></div>
-                                <div class="info-item"><span class="label">UdpSSH</span> <span class="value">1-65535</span></div>
-                                <div class="info-item"><span class="label">SSL/TLS</span> <span class="value">443</span></div>
-                                <div class="info-item"><span class="label">SSH WS</span> <span class="value">80</span></div>
-                                <div class="info-item"><span class="label">SSH SSL WS</span> <span class="value">443</span></div>
-                                <div class="info-item"><span class="label">OVPN SSL</span> <span class="value">443</span></div>
-                                <div class="info-item"><span class="label">OVPN TCP</span> <span class="value">443, 1194</span></div>
-                                <div class="info-item"><span class="label">OVPN UDP</span> <span class="value">2200</span></div>
-                                <div class="info-item"><span class="label">BadVPN UDP</span> <span class="value">7100, 7300</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="styled-config-box animate__animated">
-                        <h3>Config Port 80</h3>
-                        <div id="ssh-config-80" class="payload-display">sg69.bdloser.xyz:80@Jubair:FF</div>
-                        <button class="copy-btn" onclick="copyToClipboard('ssh-config-80', this)"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
-                    </div>
-                    <div class="styled-config-box animate__animated">
-                        <h3>Config Port 443</h3>
-                        <div id="ssh-config-443" class="payload-display">sg69.bdloser.xyz:443@Jubair:FF</div>
-                        <button class="copy-btn" onclick="copyToClipboard('ssh-config-443', this)"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
-                    </div>
-                    <div class="styled-config-box animate__animated">
-                        <h3>UDP Custom Config</h3>
-                        <div id="ssh-udp-custom" class="payload-display">sg69.bdloser.xyz:1-65535@Jubair:FF</div>
-                        <button class="copy-btn" onclick="copyToClipboard('ssh-udp-custom', this)"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
-                    </div>
-                    <div class="styled-config-box animate__animated">
-                        <h3>WSS Payload</h3>
-                        <div id="ssh-payload" class="payload-display">GET / HTTP/1.1[crlf]Host: [host][crlf]Upgrade: websocket[crlf][crlf]</div>
-                        <button class="copy-btn" onclick="copyToClipboard('ssh-payload', this)"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
-                    </div>
-                    <div class="styled-config-box animate__animated">
-                        <h3>SlowDNS Public Key</h3>
-                        <div id="ssh-pubkey" class="payload-display">12c4d17c02d17edf5be995ede1259bb4b65dc12a3aba3371bee4d2748bf09f42</div>
-                        <button class="copy-btn" onclick="copyToClipboard('ssh-pubkey', this)"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
-                    </div>
-                     <div class="card animate__animated">
-                        <div class="card-content">
-                            <h2><i class="fa-solid fa-download"></i> Downloads</h2>
-                            <div class="info-list">
-                                <div class="info-item"><span class="label">OVPN Files</span><span class="value"><a href="http://sg69.bdloser.xyz:85" target="_blank">Download</a></span></div>
-                                <div class="info-item"><span class="label">Save Account</span><span class="value"><a href="data:text/plain;charset=utf-8,Username: Jubair%0APassword: FF" download="Jubair-account.txt">Download .txt</a></span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <footer class="animate__animated">
-            <p>Need help or want more premium configs?</p>
-            <a href="https://t.me/Jubair" target="_blank" class="footer-btn">Contact Jubair bro</a>
-        </footer>
-    </div>
+    <footer>
+        <!-- --- Link Added Here --- -->
+        <p>Premium Services by <a href="https://jubairbro.pages.dev/" target="_blank" rel="noopener noreferrer">Jubair bro</a></p>
+    </footer>
     
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const subscribeOverlay = document.getElementById('subscribe-overlay');
-            const unlockButton = document.getElementById('unlock-button');
-            const unlockBtnText = document.getElementById('unlock-btn-text');
-            const mainContent = document.getElementById('main-content');
-            
-            unlockButton.addEventListener('click', (e) => {
-                window.open(unlockButton.href, '_blank');
-                e.preventDefault();
+        // --- Matrix Background Effect ---
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-                unlockButton.disabled = true;
-                let countdown = 10;
-                unlockBtnText.textContent = `Checking in ${countdown}...`;
+        const alphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789';
+        const fontSize = 16;
+        let columns = canvas.width / fontSize;
+        let rainDrops = Array.from({ length: Math.ceil(columns) }).map(() => 1);
 
-                const interval = setInterval(() => {
-                    countdown--;
-                    unlockBtnText.textContent = `Checking in ${countdown}...`;
-                    if (countdown <= 0) {
-                        clearInterval(interval);
-                        
-                        subscribeOverlay.classList.add('hidden');
-                        mainContent.classList.add('visible');
-                        
-                        initScrollAnimations();
-                    }
-                }, 1000);
+        const drawMatrix = () => {
+            ctx.fillStyle = 'rgba(16, 20, 24, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+            ctx.font = fontSize + 'px monospace';
+            rainDrops.forEach((y, ind) => {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, ind * fontSize, y * fontSize);
+                if (y * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[ind] = 0;
+                }
+                rainDrops[ind]++;
             });
+        };
+        
+        const matrixInterval = setInterval(drawMatrix, 33);
 
-            // Matrix Rain Background
-            const canvas = document.getElementById('matrix-canvas');
-            const ctx = canvas.getContext('2d');
+        window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-
-            const alphabet = 'アァカサタナハマヤャラワガザダバピ田由甲申甴电甶男甸甹町画甼甽甾甿畀畁畂畃畄畅畆畇畈畉畊畋界畍畎畏畐畑';
-            const fontSize = 16;
-            const columns = canvas.width / fontSize;
-            const rainDrops = Array.from({ length: columns }).map(() => 1);
-
-            const drawMatrix = () => {
-                ctx.fillStyle = 'rgba(16, 20, 24, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-                ctx.font = fontSize + 'px monospace';
-                rainDrops.forEach((y, ind) => {
-                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                    ctx.fillText(text, ind * fontSize, y * fontSize);
-                    if (y * fontSize > canvas.height && Math.random() > 0.975) {
-                        rainDrops[ind] = 0;
-                    }
-                    rainDrops[ind]++;
-                });
-            };
-            const matrixInterval = setInterval(drawMatrix, 33);
-
-            window.addEventListener('resize', () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                const newColumns = canvas.width / fontSize;
-                rainDrops.length = newColumns;
-                for (let i = 0; i < newColumns; i++) {
-                    if (rainDrops[i] === undefined) {
-                        rainDrops[i] = 1;
-                    }
-                }
-            });
-
-            // Scroll Animation Initialization
-            function initScrollAnimations() {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('animate__fadeInUp');
-                            observer.unobserve(entry.target); 
-                        }
-                    });
-                }, { threshold: 0.1 });
-                document.querySelectorAll('.animate__animated').forEach(el => observer.observe(el));
-            }
+            columns = canvas.width / fontSize;
+            rainDrops = Array.from({ length: Math.ceil(columns) }).map(() => 1);
         });
 
-        // Copy to Clipboard function
-        function copyToClipboard(elementId, buttonElement) {
-            const textToCopy = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const originalHTML = buttonElement.innerHTML;
-                buttonElement.innerHTML = '<i class="fa-solid fa-check"></i> <span>Copied!</span>';
-                buttonElement.classList.add('copied');
-                setTimeout(() => {
-                    buttonElement.innerHTML = originalHTML;
-                    buttonElement.classList.remove('copied');
-                }, 2000);
-            }).catch(err => console.error('Failed to copy: ', err));
-        }
+        // --- New JavaScript for Improved Animations ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const titleEl = document.getElementById('title-text');
+            const textToType = "Account Expired!";
+            let i = 0;
+
+            function typeWriter() {
+                if (i < textToType.length) {
+                    titleEl.innerHTML += textToType.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 100); // Speed of typing
+                } else {
+                    // After typing, add the rainbow animation class
+                    titleEl.classList.add('animated');
+                }
+            }
+
+            // Staggered content appearance
+            const contentIcon = document.getElementById('content-icon');
+            const contentP = document.getElementById('content-p');
+            const contentBtn = document.getElementById('content-btn');
+            
+            // Start typing after the box fades in
+            setTimeout(() => {
+                typeWriter();
+                // Make other content visible with a delay
+                contentIcon.classList.add('visible');
+                contentP.classList.add('visible');
+                contentBtn.classList.add('visible');
+            }, 800); // Corresponds to the fadeInZoom animation duration
+        });
+
     </script>
 </body>
 </html>
