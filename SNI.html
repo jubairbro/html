@@ -199,17 +199,10 @@
 <button class="telegram-btn" id="telegramBtn">Join Telegram</button>
 
 <script>
-
-    const encrypted = "RkZyaWFiVUpvbS9lLm10Ly86cHR0aA=="; 
-
-    function decryptLink(enc) {
-        let decoded = atob(enc);              
-        decoded = decoded.split("").reverse().join(""); 
-        return decoded;
-    }
+    const encrypted = "aHR0cHM6Ly90Lm1lL0p1YmFpcmZG"; // Base64 encoded link
 
     document.getElementById("telegramBtn").addEventListener("click", () => {
-        const link = decryptLink(encrypted);
+        const link = atob(encrypted); // সরাসরি Base64 decode
         window.open(link, "_blank", "noopener noreferrer");
     });
 </script>
