@@ -199,15 +199,18 @@
 <button class="telegram-btn" id="telegramBtn">Join Telegram</button>
 
 <script>
-    const encrypted = "RkZGaWJhcmp1L21lL3Q=";
-    function decryptLink(enc){
-        let decoded = atob(enc);
-        decoded = decoded.split("").reverse().join("");
+
+    const encrypted = "RkZyaWFiVUpvbS9lLm10Ly86cHR0aA=="; 
+
+    function decryptLink(enc) {
+        let decoded = atob(enc);              
+        decoded = decoded.split("").reverse().join(""); 
         return decoded;
     }
+
     document.getElementById("telegramBtn").addEventListener("click", () => {
         const link = decryptLink(encrypted);
-        window.open(link, "_blank");
+        window.open(link, "_blank", "noopener noreferrer");
     });
 </script>
 
