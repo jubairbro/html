@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> SNIs</title>
+<title>Useful SNIs</title>
 <style>
     body {
         background-color: #121212;
@@ -49,12 +49,33 @@
         margin: 0;
     }
     .box ul li {
-        padding: 5px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
         border-bottom: 1px solid #333;
         font-size: 0.95em;
+        font-family: 'Courier New', Courier, monospace;
     }
     .box ul li:last-child {
         border-bottom: none;
+    }
+    .copy-btn {
+        background-color: #333;
+        color: #e0e0e0;
+        border: 1px solid #555;
+        border-radius: 5px;
+        padding: 4px 10px;
+        cursor: pointer;
+        font-size: 0.8em;
+        transition: background-color 0.2s;
+    }
+    .copy-btn:hover {
+        background-color: #0088cc;
+    }
+    .copy-btn.copied {
+        background-color: #28a745;
+        color: #fff;
     }
     .telegram-btn {
         display: inline-block;
@@ -68,6 +89,7 @@
         margin-top: 20px;
         cursor: pointer;
         border: none;
+        text-decoration: none; /* Added for anchor tag */
     }
     .telegram-btn:hover {
         background-color: #00aaff;
@@ -87,124 +109,132 @@
 </head>
 <body>
 
-<h1>Useful SNIs - Jubair bro </h1>
+<h1>Useful SNIs - Jubair bro</h1>
 
 <div class="box">
     <h2>📺 Video Streaming</h2>
     <ul>
-        <li>youtube.com</li>
-        <li>www.youtube.com</li>
-        <li>m.youtube.com</li>
-        <li>upload.youtube.com</li>
-        <li>ytstatic.l.google.com</li>
-        <li>netflix.com</li>
-        <li>www.netflix.com</li>
-        <li>custom-netflix.com</li>
-        <li>tiktok.com</li>
-        <li>www.tiktok.com</li>
-        <li>m.tiktok.com</li>
-        <li>cdn.tiktok.com</li>
-        <li>notifications.tiktok.com</li>
-        <li>api.tiktokv.com</li>
-        <li>web.likee.video</li>
-        <li>fbimg.like.video</li>
-        <li>app.snapechat.com</li>
-        <li>cdn.snapchat.com</li>
-        <li>accounts.snapchat.com</li>
+        <li>youtube.com <button class="copy-btn" onclick="copySNI(this, 'youtube.com')">Copy</button></li>
+        <li>www.youtube.com <button class="copy-btn" onclick="copySNI(this, 'www.youtube.com')">Copy</button></li>
+        <li>m.youtube.com <button class="copy-btn" onclick="copySNI(this, 'm.youtube.com')">Copy</button></li>
+        <li>upload.youtube.com <button class="copy-btn" onclick="copySNI(this, 'upload.youtube.com')">Copy</button></li>
+        <li>ytstatic.l.google.com <button class="copy-btn" onclick="copySNI(this, 'ytstatic.l.google.com')">Copy</button></li>
+        <li>netflix.com <button class="copy-btn" onclick="copySNI(this, 'netflix.com')">Copy</button></li>
+        <li>www.netflix.com <button class="copy-btn" onclick="copySNI(this, 'www.netflix.com')">Copy</button></li>
+        <li>custom-netflix.com <button class="copy-btn" onclick="copySNI(this, 'custom-netflix.com')">Copy</button></li>
+        <li>tiktok.com <button class="copy-btn" onclick="copySNI(this, 'tiktok.com')">Copy</button></li>
+        <li>www.tiktok.com <button class="copy-btn" onclick="copySNI(this, 'www.tiktok.com')">Copy</button></li>
+        <li>m.tiktok.com <button class="copy-btn" onclick="copySNI(this, 'm.tiktok.com')">Copy</button></li>
+        <li>cdn.tiktok.com <button class="copy-btn" onclick="copySNI(this, 'cdn.tiktok.com')">Copy</button></li>
+        <li>notifications.tiktok.com <button class="copy-btn" onclick="copySNI(this, 'notifications.tiktok.com')">Copy</button></li>
+        <li>api.tiktokv.com <button class="copy-btn" onclick="copySNI(this, 'api.tiktokv.com')">Copy</button></li>
+        <li>web.likee.video <button class="copy-btn" onclick="copySNI(this, 'web.likee.video')">Copy</button></li>
+        <li>fbimg.like.video <button class="copy-btn" onclick="copySNI(this, 'fbimg.like.video')">Copy</button></li>
+        <li>app.snapechat.com <button class="copy-btn" onclick="copySNI(this, 'app.snapechat.com')">Copy</button></li>
+        <li>cdn.snapchat.com <button class="copy-btn" onclick="copySNI(this, 'cdn.snapchat.com')">Copy</button></li>
+        <li>accounts.snapchat.com <button class="copy-btn" onclick="copySNI(this, 'accounts.snapchat.com')">Copy</button></li>
     </ul>
 </div>
 
 <div class="box">
     <h2>🎞️ OTT & Live TV</h2>
     <ul>
-        <li>www.hoichoi.tv</li>
-        <li>api.hoichoi.tv</li>
-        <li>www.tsports.com</li>
-        <li>live-cdn.tsports.com</li>
-        <li>mapi-cdn.tsports.com</li>
-        <li>bongobd.com</li>
-        <li>www.bongobd.com</li>
-        <li>api.bongobd.com</li>
-        <li>www.chorki.com</li>
-        <li>api.chorki.com</li>
-        <li>primevideo.com</li>
-        <li>www.primevideo.com</li>
+        <li>www.hoichoi.tv <button class="copy-btn" onclick="copySNI(this, 'www.hoichoi.tv')">Copy</button></li>
+        <li>api.hoichoi.tv <button class="copy-btn" onclick="copySNI(this, 'api.hoichoi.tv')">Copy</button></li>
+        <li>www.tsports.com <button class="copy-btn" onclick="copySNI(this, 'www.tsports.com')">Copy</button></li>
+        <li>live-cdn.tsports.com <button class="copy-btn" onclick="copySNI(this, 'live-cdn.tsports.com')">Copy</button></li>
+        <li>mapi-cdn.tsports.com <button class="copy-btn" onclick="copySNI(this, 'mapi-cdn.tsports.com')">Copy</button></li>
+        <li>bongobd.com <button class="copy-btn" onclick="copySNI(this, 'bongobd.com')">Copy</button></li>
+        <li>www.bongobd.com <button class="copy-btn" onclick="copySNI(this, 'www.bongobd.com')">Copy</button></li>
+        <li>api.bongobd.com <button class="copy-btn" onclick="copySNI(this, 'api.bongobd.com')">Copy</button></li>
+        <li>www.chorki.com <button class="copy-btn" onclick="copySNI(this, 'www.chorki.com')">Copy</button></li>
+        <li>api.chorki.com <button class="copy-btn" onclick="copySNI(this, 'api.chorki.com')">Copy</button></li>
+        <li>primevideo.com <button class="copy-btn" onclick="copySNI(this, 'primevideo.com')">Copy</button></li>
+        <li>www.primevideo.com <button class="copy-btn" onclick="copySNI(this, 'www.primevideo.com')">Copy</button></li>
     </ul>
 </div>
 
 <div class="box">
     <h2>🌐 Social Media & Messaging</h2>
     <ul>
-        <li>facebook.com</li>
-        <li>www.facebook.com</li>
-        <li>m.facebook.com</li>
-        <li>scontent.xx.fbcdn.net</li>
-        <li>static.xx.fbcdn.net</li>
-        <li>instagram.com</li>
-        <li>www.instagram.com</li>
-        <li>m.instagram.com</li>
-        <li>graph.instagram.com</li>
-        <li>web.whatsapp.com</li>
-        <li>chat.whatsapp.com</li>
-        <li>whatsapp.com</li>
-        <li>web.telegram.org</li>
-        <li>api.telegram.org</li>
-        <li>telegram.org</li>
-        <li>twitter.com</li>
-        <li>x.com</li>
-        <li>mobile.twitter.com</li>
+        <li>facebook.com <button class="copy-btn" onclick="copySNI(this, 'facebook.com')">Copy</button></li>
+        <li>www.facebook.com <button class="copy-btn" onclick="copySNI(this, 'www.facebook.com')">Copy</button></li>
+        <li>m.facebook.com <button class="copy-btn" onclick="copySNI(this, 'm.facebook.com')">Copy</button></li>
+        <li>scontent.xx.fbcdn.net <button class="copy-btn" onclick="copySNI(this, 'scontent.xx.fbcdn.net')">Copy</button></li>
+        <li>static.xx.fbcdn.net <button class="copy-btn" onclick="copySNI(this, 'static.xx.fbcdn.net')">Copy</button></li>
+        <li>instagram.com <button class="copy-btn" onclick="copySNI(this, 'instagram.com')">Copy</button></li>
+        <li>www.instagram.com <button class="copy-btn" onclick="copySNI(this, 'www.instagram.com')">Copy</button></li>
+        <li>m.instagram.com <button class="copy-btn" onclick="copySNI(this, 'm.instagram.com')">Copy</button></li>
+        <li>graph.instagram.com <button class="copy-btn" onclick="copySNI(this, 'graph.instagram.com')">Copy</button></li>
+        <li>web.whatsapp.com <button class="copy-btn" onclick="copySNI(this, 'web.whatsapp.com')">Copy</button></li>
+        <li>chat.whatsapp.com <button class="copy-btn" onclick="copySNI(this, 'chat.whatsapp.com')">Copy</button></li>
+        <li>whatsapp.com <button class="copy-btn" onclick="copySNI(this, 'whatsapp.com')">Copy</button></li>
+        <li>web.telegram.org <button class="copy-btn" onclick="copySNI(this, 'web.telegram.org')">Copy</button></li>
+        <li>api.telegram.org <button class="copy-btn" onclick="copySNI(this, 'api.telegram.org')">Copy</button></li>
+        <li>telegram.org <button class="copy-btn" onclick="copySNI(this, 'telegram.org')">Copy</button></li>
+        <li>twitter.com <button class="copy-btn" onclick="copySNI(this, 'twitter.com')">Copy</button></li>
+        <li>x.com <button class="copy-btn" onclick="copySNI(this, 'x.com')">Copy</button></li>
+        <li>mobile.twitter.com <button class="copy-btn" onclick="copySNI(this, 'mobile.twitter.com')">Copy</button></li>
     </ul>
 </div>
 
 <div class="box">
     <h2>🎮 Gaming</h2>
     <ul>
-        <li>ff.garena.com</li>
-        <li>api.garena.com</li>
-        <li>pubgmobile.com</li>
-        <li>www.pubgmobile.com</li>
-        <li>dlied1.qq.com</li>
-        <li>codm.com</li>
-        <li>www.codm.com</li>
+        <li>ff.garena.com <button class="copy-btn" onclick="copySNI(this, 'ff.garena.com')">Copy</button></li>
+        <li>api.garena.com <button class="copy-btn" onclick="copySNI(this, 'api.garena.com')">Copy</button></li>
+        <li>pubgmobile.com <button class="copy-btn" onclick="copySNI(this, 'pubgmobile.com')">Copy</button></li>
+        <li>www.pubgmobile.com <button class="copy-btn" onclick="copySNI(this, 'www.pubgmobile.com')">Copy</button></li>
+        <li>dlied1.qq.com <button class="copy-btn" onclick="copySNI(this, 'dlied1.qq.com')">Copy</button></li>
+        <li>codm.com <button class="copy-btn" onclick="copySNI(this, 'codm.com')">Copy</button></li>
+        <li>www.codm.com <button class="copy-btn" onclick="copySNI(this, 'www.codm.com')">Copy</button></li>
     </ul>
 </div>
 
 <div class="box">
     <h2>📞 Communication Apps (VoIP)</h2>
     <ul>
-        <li>imo.im</li>
-        <li>www.imo.im</li>
-        <li>api.imo.im</li>
-        <li>meet.google.com</li>
-        <li>zoom.us</li>
-        <li>www.zoom.us</li>
+        <li>imo.im <button class="copy-btn" onclick="copySNI(this, 'imo.im')">Copy</button></li>
+        <li>www.imo.im <button class="copy-btn" onclick="copySNI(this, 'www.imo.im')">Copy</button></li>
+        <li>api.imo.im <button class="copy-btn" onclick="copySNI(this, 'api.imo.im')">Copy</button></li>
+        <li>meet.google.com <button class="copy-btn" onclick="copySNI(this, 'meet.google.com')">Copy</button></li>
+        <li>zoom.us <button class="copy-btn" onclick="copySNI(this, 'zoom.us')">Copy</button></li>
+        <li>www.zoom.us <button class="copy-btn" onclick="copySNI(this, 'www.zoom.us')">Copy</button></li>
     </ul>
 </div>
 
 <div class="box">
     <h2>⚡ Other Important SNIs</h2>
     <ul>
-        <li>www.google.com</li>
-        <li>drive.google.com</li>
-        <li>docs.google.com</li>
-        <li>play.google.com</li>
-        <li>cloudflare.com</li>
-        <li>one.one.one.one</li>
-        <li>apple.com</li>
-        <li>www.apple.com</li>
-        <li>itunes.apple.com</li>
+        <li>www.google.com <button class="copy-btn" onclick="copySNI(this, 'www.google.com')">Copy</button></li>
+        <li>drive.google.com <button class="copy-btn" onclick="copySNI(this, 'drive.google.com')">Copy</button></li>
+        <li>docs.google.com <button class="copy-btn" onclick="copySNI(this, 'docs.google.com')">Copy</button></li>
+        <li>play.google.com <button class="copy-btn" onclick="copySNI(this, 'play.google.com')">Copy</button></li>
+        <li>cloudflare.com <button class="copy-btn" onclick="copySNI(this, 'cloudflare.com')">Copy</button></li>
+        <li>one.one.one.one <button class="copy-btn" onclick="copySNI(this, 'one.one.one.one')">Copy</button></li>
+        <li>apple.com <button class="copy-btn" onclick="copySNI(this, 'apple.com')">Copy</button></li>
+        <li>www.apple.com <button class="copy-btn" onclick="copySNI(this, 'www.apple.com')">Copy</button></li>
+        <li>itunes.apple.com <button class="copy-btn" onclick="copySNI(this, 'itunes.apple.com')">Copy</button></li>
     </ul>
 </div>
 
-<button class="telegram-btn" id="telegramBtn">Join Telegram</button>
+<a href="https://t.me/JubairFF" target="_blank" class="telegram-btn">Join Telegram</a>
 
 <script>
-    const encrypted = "aHR0cHM6Ly90Lm1lL0p1YmFpcmZG"; // Base64 encoded link
-
-    document.getElementById("telegramBtn").addEventListener("click", () => {
-        const link = atob(encrypted); // সরাসরি Base64 decode
-        window.open(link, "_blank", "noopener noreferrer");
-    });
+    function copySNI(buttonElement, textToCopy) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            const originalText = buttonElement.innerText;
+            buttonElement.innerText = 'Copied!';
+            buttonElement.classList.add('copied');
+            
+            setTimeout(() => {
+                buttonElement.innerText = originalText;
+                buttonElement.classList.remove('copied');
+            }, 1500);
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+    }
 </script>
 
 </body>
