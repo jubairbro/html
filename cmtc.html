@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sifat Computer & Training Center | Best Computer Training Institute</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a5276;
+            --secondary: #e74c3c;
+            --accent: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: left;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: left;
+        }
+        
+        .logo i {
+            font-size: 2.2rem;
+            margin-right: 12px;
+            color: white;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .logo-text span {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.2rem;
+            position: relative;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        nav ul li a i {
+            margin-right: 6px;
+            font-size: 0.9rem;
+        }
+        
+        nav ul li a:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 10px;
+            border-radius: 5px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://raw.githubusercontent.com/yeasinulhoquetuhin/Sifat-CMP/refs/heads/master/Screenshot_20250929-230218_Gallery.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 7rem 0 4rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h2 {
+            font-size: 2rem;
+            margin-bottom: 1.2rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+        }
+        
+        .hero p {
+            font-size: 1rem;
+            margin-bottom: 1.8rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--gradient);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            margin-left: 12px;
+        }
+        
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+        
+        /* About Section */
+        .about {
+            padding: 4rem 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .section-title h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--gradient);
+        }
+        
+        .section-title p {
+            font-size: 0.9rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            color: var(--dark);
+        }
+        
+        .about-text p {
+            margin-bottom: 1.2rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-item i {
+            color: var(--secondary);
+            font-size: 1rem;
+            margin-right: 8px;
+        }
+        
+        .about-image {
+            flex: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .about-image:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Mission Section */
+        .mission {
+            padding: 4rem 0;
+            background: var(--gradient);
+            color: white;
+            text-align: center;
+        }
+        
+        .mission-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .mission h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .mission p {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Facilities Section */
+        .facilities {
+            padding: 4rem 0;
+            background-color: white;
+        }
+        
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .facility-card {
+            background-color: white;
+            padding: 2rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .facility-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+        
+        .facility-card i {
+            font-size: 2.2rem;
+            color: var(--secondary);
+            margin-bottom: 1.2rem;
+        }
+        
+        .facility-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--dark);
+        }
+        
+        .facility-card p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        /* Courses Section */
+        .courses {
+            padding: 4rem 0;
+            background-color: var(--light);
+        }
+        
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .course-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+        
+        .course-icon {
+            background: var(--gradient);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+        
+        .course-content {
+            padding: 1.5rem;
+        }
+        
+        .course-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--dark);
+        }
+        
+        .course-content p {
+            margin-bottom: 1.2rem;
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        /* Gallery Section */
+        .gallery {
+            padding: 4rem 0;
+            background-color: white;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
+            margin-top: 2.5rem;
+        }
+        
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        /* Location Section */
+        .location {
+            padding: 4rem 0;
+            background-color: var(--light);
+        }
+        
+        .location-content {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        
+        .location-info {
+            flex: 1;
+        }
+        
+        .location-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            color: var(--dark);
+        }
+        
+        .location-info p {
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        .location-map {
+            flex: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            height: 250px;
+        }
+        
+        .location-map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Contact Section */
+        .contact {
+            padding: 4rem 0;
+            background-color: white;
+        }
+        
+        .contact-content {
+            display: flex;
+            gap: 2.5rem;
+        }
+        
+        .contact-info {
+            flex: 1;
+        }
+        
+        .contact-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            color: var(--dark);
+        }
+        
+        .contact-details {
+            margin-bottom: 1.8rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.2rem;
+        }
+        
+        .contact-item i {
+            font-size: 1rem;
+            color: var(--secondary);
+            margin-right: 0.8rem;
+            width: 25px;
+            height: 25px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .contact-item div {
+            flex: 1;
+        }
+        
+        .contact-item strong {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+            color: var(--dark);
+        }
+        
+        .contact-form {
+            flex: 1;
+            background-color: white;
+            padding: 1.8rem;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+        
+        .contact-form h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            color: var(--dark);
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.85rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.8rem;
+        }
+        
+        .footer-column {
+            flex: 1;
+            margin-right: 1.8rem;
+        }
+        
+        .footer-column:last-child {
+            margin-right: 0;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-bottom: 8px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--secondary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.6rem;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        
+        .footer-links a i {
+            margin-right: 6px;
+            font-size: 0.8rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+            padding-left: 4px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1.2rem;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        
+        .developer-credit {
+            text-align: center;
+            margin-top: 0.8rem;
+        }
+        
+        .developer-credit a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        
+        .developer-credit a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .about-content, .contact-content, .location-content {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                flex-wrap: wrap;
+            }
+            
+            .footer-column {
+                flex: 0 0 48%;
+                margin-bottom: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 0.8rem;
+            }
+            
+            nav ul {
+                margin-top: 0.8rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 0.4rem;
+            }
+            
+            .mobile-menu {
+                display: block;
+                position: absolute;
+                top: 12px;
+                right: 12px;
+            }
+            
+            nav ul {
+                display: none;
+                width: 100%;
+                text-align: center;
+                margin-top: 0.8rem;
+            }
+            
+            nav ul.show {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            nav ul li {
+                margin: 0.4rem 0;
+            }
+            
+            .hero h2 {
+                font-size: 1.6rem;
+            }
+            
+            .hero p {
+                font-size: 0.9rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.5rem;
+            }
+            
+            .footer-column {
+                flex: 0 0 100%;
+            }
+            
+            .about-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .facilities-grid, .courses-grid, .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero {
+                padding: 5rem 0 2.5rem;
+            }
+            
+            .btn-container {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .btn-outline {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-laptop-code"></i>
+                    <div class="logo-text">
+                        <h1>Sifat Computer</h1>
+                        <span>& Training Center</span>
+                    </div>
+                </div>
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
+                        <li><a href="#facilities"><i class="fas fa-cogs"></i> Facilities</a></li>
+                        <li><a href="#courses"><i class="fas fa-graduation-cap"></i> Courses</a></li>
+                        <li><a href="#gallery"><i class="fas fa-images"></i> Gallery</a></li>
+                        <li><a href="#location"><i class="fas fa-map-marker-alt"></i> Location</a></li>
+                        <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <p><h2>Your Digital Skills Development Partner</h2>
+                <p>সিফাত কম্পিউটার এন্ড ট্রেনিং সেন্টারে আমরা কম্পিউটার শিক্ষা এবং অনলাইন কাজের প্রশিক্ষণ দিয়ে থাকি। আমাদের অভিজ্ঞ প্রশিক্ষকদের তত্ত্বাবধানে আধুনিক ল্যাবে হাতে-কলমে শিখুন।</p>
+                <div class="btn-container">
+                    <a href="#courses" class="btn">Explore Courses</a>
+                    <a href="#contact" class="btn btn-outline">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>About Our Center</h2>
+                <p>গুণগত শিক্ষা ও প্রশিক্ষণের মাধ্যমে দক্ষ মানবসম্পদ গড়ে তোলাই আমাদের লক্ষ্য</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>বিশ্বস্ত কম্পিউটার প্রশিক্ষণ কেন্দ্র</h3>
+                    <p>সিফাত কম্পিউটার এন্ড ট্রেনিং সেন্টার একটি বিশ্বস্ত কম্পিউটার প্রশিক্ষণ কেন্দ্র যেখানে ব্যক্তিগতভাবে পরিচালনা করা হয়। আমরা কম্পিউটার প্রশিক্ষণের পাশাপাশি সকল ধরনের অনলাইন কাজের প্রশিক্ষণ দিয়ে থাকি।</p>
+                    <p>আমাদের কেন্দ্রে অভিজ্ঞ প্রশিক্ষক, আধুনিক কম্পিউটার ল্যাব, সাশ্রয়ী কোর্স ফি এবং কোর্স সম্পন্ন করার পর সার্টিফিকেট প্রদান করা হয়। এছাড়াও স্কুল পরীক্ষার প্রশ্ন অনুশীলন এবং ফটোকপি সেবাও আমরা প্রদান করি।</p>
+                    
+                    <div class="about-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>০৫+ বছর অভিজ্ঞতা</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>৫০০+ শিক্ষার্থী প্রশিক্ষিত</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>চাকরি সহায়তা</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>নমনীয় ক্লাস সময়সূচী</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="https://raw.githubusercontent.com/yeasinulhoquetuhin/Sifat-CMP/refs/heads/master/Screenshot_20250929-230218_Gallery.jpg" alt="Sifat Computer & Training Center">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission">
+        <div class="container">
+            <div class="mission-content">
+                <h2>Our Mission & Vision</h2>
+                <p>আমাদের মিশন হল ব্যক্তিদের ডিজিটাল দক্ষতা দিয়ে সক্ষম করা যা তাদের আজকের প্রযুক্তি-চালিত বিশ্বে সফল হতে সক্ষম করে। আমরা মানসম্পন্ন কম্পিউটার শিক্ষা প্রদান করতে চাই যা বর্তমান বাজার চাহিদার সাথে প্রাসঙ্গিক, সাশ্রয়ী এবং অ্যাক্সেসযোগ্য।</p>
+                <p>আমরা এমন একটি সমাজের কল্পনা করি যেখানে প্রত্যেকের ডিজিটাল সাক্ষরতা এবং প্রযুক্তিগত দক্ষতা বিকাশের সুযোগ রয়েছে, যা উন্নত কর্মসংস্থান, উদ্যোক্তা এবং ব্যক্তিগত বৃদ্ধির দরজা খুলে দেয়।</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Facilities Section -->
+    <section class="facilities" id="facilities">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Facilities</h2>
+                <p>আমরা শিক্ষার্থীদের জন্য সর্বোচ্চ সুবিধা নিশ্চিত করি</p>
+            </div>
+            <div class="facilities-grid">
+                <div class="facility-card">
+                    <i class="fas fa-user-tie"></i>
+                    <h3>Experienced Trainers</h3>
+                    <p>আমাদের অভিজ্ঞ এবং যোগ্য প্রশিক্ষকবৃন্দ হাতে-কলমে প্রশিক্ষণ দিয়ে থাকেন।</p>
+                </div>
+                <div class="facility-card">
+                    <i class="fas fa-desktop"></i>
+                    <h3>Modern Computer Lab</h3>
+                    <p>সর্বাধুনিক কম্পিউটার এবং সফটওয়্যার নিয়ে গঠিত আমাদের ল্যাব।</p>
+                </div>
+                <div class="facility-card">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <h3>Affordable Course Fees</h3>
+                    <p>সকলের নাগালের মধ্যে কোর্স ফি রাখা হয়েছে যাতে সবাই কম্পিউটার শিখতে পারে। এবং প্রথম ১ মাস ফ্রী। পরবর্তী মাসের জন্য নির্ধারিত ফি প্রদান করতে হবে। ৩ মাসের জন্য ৪ হাজার টাকা। এবং ৬ মাসের জন্য 6 হাজার টাকা।</p>
+                </div>
+                <div class="facility-card">
+                    <i class="fas fa-certificate"></i>
+                    <h3>Certificate After Completion</h3>
+                    <p>কোর্স সফলভাবে সম্পন্ন করার পর আমরা সার্টিফিকেট প্রদান করি।</p>
+                </div>
+                <div class="facility-card">
+                    <i class="fas fa-briefcase"></i>
+                    <h3>Job Assistance</h3>
+                    <p>আমরা মেধাবী শিক্ষার্থীদের চাকরি খুঁজে পেতে সহায়তা করি।</p>
+                </div>
+                <div class="facility-card">
+                    <i class="fas fa-copy"></i>
+                    <h3>Photocopy Service</h3>
+                    <p>আমাদের কেন্দ্রে সাশ্রয়ী মূল্যে ফটোকপি সেবা প্রদান করা হয়।</p>
+                </div>
+                <div class="facility-card">
+                    <i class="fas fa-book"></i>
+                    <h3>School Exam Practice</h3>
+                    <p>স্কুল পরীক্ষার প্রশ্ন অনুশীলনের সুবিধা রয়েছে আমাদের কেন্দ্রে। এবং বিভিন্ন স্কুল এর প্রশ্ন তৈরি করা হয় আমাদের কেন্দ্রে</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="courses" id="courses">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Courses</h2>
+                <p>বিভিন্ন ধরনের কম্পিউটার এবং প্রযুক্তি বিষয়ক কোর্স</p>
+            </div>
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-icon">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Basic Computer</h3>
+                        <p>কম্পিউটারের মৌলিক বিষয়গুলো শেখার জন্য আদর্শ কোর্স। অপারেটিং সিস্টেম, ফাইল ম্যানেজমেন্ট, ইন্টারনেট ব্রাউজিং সহ সকল বেসিক বিষয় শিখুন।</p>
+                        <a href="#contact" class="btn">Learn More</a>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>MS Word, Excel, PowerPoint</h3>
+                        <p>অফিস অটোমেশনের জন্য প্রয়োজনীয় এমএস অফিসের সকল অ্যাপ্লিকেশন দক্ষতার সাথে শিখুন। ডকুমেন্ট তৈরি, ডাটা এনালাইসিস, প্রেজেন্টেশন তৈরি ইত্যাদি।</p>
+                        <a href="#contact" class="btn">Learn More</a>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Internet & Email</h3>
+                        <p>ইন্টারনেটের কার্যকরী ব্যবহার, তথ্য অনুসন্ধান, ইমেইল তৈরি ও ব্যবস্থাপনা, অনলাইন সুরক্ষা এবং সামাজিক যোগাযোগ মাধ্যমের ব্যবহার শিখুন।</p>
+                        <a href="#contact" class="btn">Learn More</a>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Graphics Design</h3>
+                        <p>আধুনিক গ্রাফিক্স ডিজাইনের সকল টুলস শিখুন। লোগো ডিজাইন, বিজ্ঞাপন তৈরি, ব্যানার ডিজাইন সহ সকল ধরনের গ্রাফিক্স ডিজাইনের কাজ শিখুন।</p>
+                        <a href="#contact" class="btn">Learn More</a>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Video Editing</h3>
+                        <p>পেশাদার ভিডিও এডিটিং শিখুন। ভিডিও কাটাছেঁড়া, অডিও এডিটিং, এনিমেশন, ভিজ্যুয়াল ইফেক্ট এবং ভিডিও রেন্ডারিং শিখুন।</p>
+                        <a href="#contact" class="btn">Learn More</a>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon">
+                        <i class="fas fa-laptop-house"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Freelancing Training</h3>
+                        <p>অনলাইনে ফ্রিল্যান্সিং করে আয় করার সকল কৌশল শিখুন। মার্কেটপ্লেস একাউন্ট তৈরি, প্রোপোজাল লেখা, ক্লায়েন্ট ব্যবস্থাপনা ইত্যাদি শিখুন।</p>
+                        <a href="#contact" class="btn">Learn More</a>
+                    </div>
+                </div>
+                <div class="course-card">
+                    <div class="course-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Hardware & Software Solution</h3>
+                        <p>কম্পিউটার হার্ডওয়্যার ও সফটওয়্যার সমস্যা সমাধানের পূর্ণাঙ্গ প্রশিক্ষণ। ট্রাবলশুটিং, ইনস্টলেশন, মেইনটেনেন্স ইত্যাদি শিখুন।</p>
+                        <a href="#contact" class="btn">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Gallery</h2>
+                <p>আমাদের ট্রেনিং সেন্টারের কিছু মুহূর্ত</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://raw.githubusercontent.com/yeasinulhoquetuhin/Sifat-CMP/refs/heads/master/Screenshot_20250929-230218_Gallery.jpg" alt="Sifat Computer Center - Interior View 1">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://raw.githubusercontent.com/yeasinulhoquetuhin/Sifat-CMP/refs/heads/master/Screenshot_20250929-230808_Gallery.jpg" alt="Sifat Computer Center - Interior View 2">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://raw.githubusercontent.com/yeasinulhoquetuhin/Sifat-CMP/refs/heads/master/Screenshot_20250929-225202_Maps.jpg" alt="Sifat Computer Center - Google Maps Location">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://raw.githubusercontent.com/yeasinulhoquetuhin/Sifat-CMP/refs/heads/master/Screenshot_20250929-230227_Gallery.jpg" alt="Sifat Computer Center - Exterior View">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section class="location" id="location">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Location</h2>
+                <p>আমাদের কেন্দ্রে ভিজিট করে আরও তথ্য নিন</p>
+            </div>
+            <div class="location-content">
+                <div class="location-info">
+                    <h3>আমাদের ঠিকানা</h3>
+                    <p>আমাদের কেন্দ্রটি পাবলিক ট্রান্সপোর্টে সহজে যাওয়া যায় এমন একটি সুবিধাজনক অবস্থানে অবস্থিত। আমাদের অপারেটিং ঘন্টার মধ্যে আমাদের সাথে দেখা করতে নির্দ্বিধায় আসুন আমাদের কোর্স এবং সুবিধা সম্পর্কে আরও জানতে।</p>
+                    <p>আমরা সব ধরনের পটভূমি এবং বয়সের শিক্ষার্থীদের স্বাগত জানাই। আমাদের বন্ধুত্বপূর্ণ কর্মীরা কোর্স নির্বাচন এবং আপনার যে কোনও প্রশ্নের উত্তর দিতে সাহায্য করতে খুশি হবে।</p>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <strong>Opening Hours</strong>
+                            <p>Sunday - Thursday: Morning  8:00 AM - 9:00 AM And Evening time 4:30PM - 10:00PM<br>Friday And Saturday: 0:00 PM - 0:00 PM</p>
+                        </div>
+                    </div>
+                    <a href="https://maps.app.goo.gl/tashVKCq7tJX9Kfg8?g_st=afm" target="_blank" class="btn">View on Google Maps</a>
+                </div>
+                <div class="location-map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.862337241864!2d90.426774375054!3d23.75385798808046!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8707bdb7c2d%3A0x7c0d254e3bb0801c!2sSifat%20Computer%20%26%20Training%20Center!5e0!3m2!1sen!2sbd!4v1690000000000!5m2!1sen!2sbd" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+                <p>যেকোনো তথ্যের জন্য আমাদের সাথে যোগাযোগ করুন</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <strong>Our Center Location:</strong>
+                                <p>Google Maps Link</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <strong>Phone Numbers:</strong>
+                                <p>01926-868358, 01575-132338</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <strong>Email:</strong>
+                                <p>sifatcomputer409@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-user"></i>
+                            <div>
+                                <strong>Owner Info:</strong>
+                                <p>A trusted computer training center operated personally.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3>Send Message</h3>
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" class="form-control" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="text" id="phone" class="form-control" placeholder="Enter your phone number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" class="form-control" placeholder="Enter your email address">
+                        </div>
+                        <div class="form-group">
+                            <label for="course">Course Interested In</label>
+                            <select id="course" class="form-control">
+                                <option value="">Select a course</option>
+                                <option value="basic">Basic Computer</option>
+                                <option value="office">MS Office</option>
+                                <option value="internet">Internet & Email</option>
+                                <option value="graphics">Graphics Design</option>
+                                <option value="video">Video Editing</option>
+                                <option value="freelancing">Freelancing Training</option>
+                                <option value="hardware">Hardware & Software</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" class="form-control" placeholder="Enter your message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Sifat Computer</h3>
+                    <p>আপনার ডিজিটাল দক্ষতা উন্নয়নের নির্ভরযোগ্য সঙ্গী। কম্পিউটার প্রশিক্ষণ এবং অনলাইন কাজের প্রশিক্ষণে আমরা অগ্রগামী।</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Our Courses</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Basic Computer</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> MS Office</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Internet & Email</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Graphics Design</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Video Editing</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Freelancing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="#facilities"><i class="fas fa-chevron-right"></i> Facilities</a></li>
+                        <li><a href="#courses"><i class="fas fa-chevron-right"></i> Courses</a></li>
+                        <li><a href="#gallery"><i class="fas fa-chevron-right"></i> Gallery</a></li>
+                        <li><a href="#location"><i class="fas fa-chevron-right"></i> Location</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> Google Maps Location</a></li>
+                        <li><a href="tel:01926868358"><i class="fas fa-phone"></i> 01926-868358</a></li>
+                        <li><a href="tel:01575132338"><i class="fas fa-phone"></i> 01575-132338</a></li>
+                        <li><a href="mailto:sifatcomputer409@gmail.com"><i class="fas fa-envelope"></i> sifatcomputer409@gmail.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Sifat Computer & Training Center. All Rights Reserved.</p>
+                <div class="developer-credit">
+                    <p>Developed By: <a href="https://ahamedrahim.github.io/Rahim-Info/" target="_blank">Ahamed Rahim</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            document.querySelector('nav ul').classList.toggle('show');
+        });
+        
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu after clicking
+                    document.querySelector('nav ul').classList.remove('show');
+                }
+            });
+        });
+        
+        // Form Submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will contact you soon.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
